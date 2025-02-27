@@ -23,8 +23,7 @@ IdUtils::USER_ID IdUtils::GENERATE_USER_ID()
 	IdUtils::USER_ID new_user_id;
 
 	// keep generating a new user ID until it is unique
-	do 
-	{
+	do {
 		new_user_id = rng_distribution( random_generator );
 
 		// check if the user ID already exists
@@ -53,8 +52,7 @@ IdUtils::ACCOUNT_ID IdUtils::GENERATE_ACCOUNT_ID()
 	IdUtils::ACCOUNT_ID new_account_id;
 
 	// keep generating a new account ID until it is unique
-	do 
-	{
+	do {
 		new_account_id = rng_distribution( random_generator );
 
 		// check if the account ID already exists
