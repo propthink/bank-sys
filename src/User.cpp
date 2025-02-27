@@ -1,9 +1,42 @@
 #include "User.h"
+#include <random> // for random number generation
+
+// generates a random, unique user ID
+USER_ID GENERATE_USER_ID()
+{
+	// get a random seed from the system
+	std::random_device random_device;
+
+	// initialize a random number generator with the seed
+	std::mt19937 random_generator( random_device() );
+
+	// define the range for generating 6-digit IDs
+	std::uniform_int_distribution<> rng_distribution( 100000, 999999 );
+
+	// store the generated user ID for comparison
+	USER_ID new_user_id;
+
+	// keep generating a new user ID until it is unique
+	do {
+		new_user_id = rng_distribution( random_generator );
+
+		// check if the user ID already exists
+	} while( GENERATED_USER_IDS.find( new_user_id ) != GENERATED_USER_IDS.end() );
+
+	// insert the new unique user ID into the set
+	GENERATED_USER_IDS.insert( new_user_id );
+
+	// return the newly generated unique user ID
+	return new_user_id;
+}
+
+// tracks existing user IDs to enforce uniqueness
+std::unordered_set< USER_ID > GENERATED_USER_IDS;
 
 // initialize user data
 UserInfo::UserInfo(
 
-	IdUtils::USER_ID user_id, std::string full_name,
+	USER_ID user_id, std::string full_name,
 
 	std::string phone_number, std::string email_address )
 
@@ -17,7 +50,7 @@ User::User( const UserInfo& user_info )
 	: m_user_info( user_info ) { }
 
 // get the unique id associated with this user
-IdUtils::USER_ID User::getUserId() const
+USER_ID User::getUserId() const
 {
 	return m_user_info.m_user_id;
 }
@@ -67,7 +100,7 @@ void UserRegistry::addUser( std::unique_ptr< User > user )
 }
 
 // search for a user by user id
-UserNode* UserRegistry::findUser( IdUtils::USER_ID user_id )
+UserNode* UserRegistry::findUser( USER_ID user_id )
 {
 	// start from the head of the list
 	UserNode* current_node = m_head.get();
