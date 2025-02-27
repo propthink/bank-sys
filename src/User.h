@@ -17,13 +17,14 @@ extern std::unordered_set< Utils::USER_ID > GENERATED_USER_IDS;
 // stores user information, including user id, name, phone, and email
 struct UserInfo
 {
+	// initialize user data
 	UserInfo(
 	
 		Utils::USER_ID user_id, std::string full_name,
 
 		std::string phone_number, std::string email_address
 
-		); // initialize user data
+		);
 
 	Utils::USER_ID m_user_id; // unique user id
 
@@ -39,7 +40,8 @@ class User
 {
 public:
 
-	User( const UserInfo& user_info ); // initialize user
+	// initialize user
+	User( const UserInfo& user_info );
 
 	// get the unique id associated with this user
 	Utils::USER_ID getUserId() const;
@@ -49,7 +51,8 @@ public:
 
 private:
 
-	UserInfo m_user_info; // user info
+	// user information
+	UserInfo m_user_info;
 
 	// accounts associated with this user
 	std::vector< std::unique_ptr< IAccount > > m_user_accounts;
@@ -60,13 +63,17 @@ class UserNode
 {
 public:
 
-	UserNode( std::unique_ptr< User > user ); // initialize node with user
+	// initialize node with user
+	UserNode( std::unique_ptr< User > user );
 
-	std::unique_ptr< User > m_user; // the actual user object
+	// the actual user object
+	std::unique_ptr< User > m_user;
 
-	std::unique_ptr< UserNode > m_next; // pointer to the next node
+	// pointer to the next node
+	std::unique_ptr< UserNode > m_next;
 
-	UserNode* m_prev; // pointer to the previous node
+	// pointer to the previous node
+	UserNode* m_prev;
 };
 
 // a registry that stores users in a doubly linked list
@@ -74,7 +81,8 @@ class UserRegistry
 {
 public:
 
-	UserRegistry(); // initialize the user registry
+	// initialize the user registry
+	UserRegistry();
 
 	// add a user at the end of the list
 	void addUser( std::unique_ptr< User > user );

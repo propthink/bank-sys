@@ -35,11 +35,14 @@ public:
 	// initialize transaction node
 	TransactionNode( const Transaction& transaction );
 
-	std::unique_ptr< Transaction > m_transaction; // the actual transaction object
+	// the actual transaction object
+	std::unique_ptr< Transaction > m_transaction;
 
-	std::unique_ptr< TransactionNode > m_next; // pointer to the next node
+	// pointer to the next node
+	std::unique_ptr< TransactionNode > m_next;
 
-	TransactionNode* m_prev; // pointer to the previous node
+	// pointer to the previous node
+	TransactionNode* m_prev;
 };
 
 // manages a doubly linked list of transactions
@@ -58,9 +61,11 @@ public:
 
 private:
 
-	std::unique_ptr< TransactionNode > m_head; // head of the list
+	// head of the list
+	std::unique_ptr< TransactionNode > m_head;
 
-	TransactionNode* m_tail; // tail of the list
+	// tail of the list
+	TransactionNode* m_tail;
 };
 
 #endif // TRANSACTION_H
