@@ -22,6 +22,12 @@ IdUtils::USER_ID User::getUserId() const
 	return m_user_info.m_user_id;
 }
 
+// add an account to this user
+void User::addAccount( std::unique_ptr< IAccount > new_account )
+{
+	m_user_accounts.push_back( std::move( new_account ) );
+}
+
 // initialize node with user
 UserNode::UserNode( std::unique_ptr< User > user )
 

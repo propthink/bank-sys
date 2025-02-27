@@ -2,8 +2,10 @@
 #define USER_H
 
 #include "Utilities.h" // for utils
+#include "Account.h" // for accounts
 #include <string> // for std::string
 #include <memory> // for std::unique_ptr
+#include <vector> // for std::vector
 
 // stores user information, including user id, name, phone, and email
 struct UserInfo
@@ -35,9 +37,15 @@ public:
 	// get the unique id associated with this user
 	IdUtils::USER_ID getUserId() const;
 
+	// add an account to this user
+	void addAccount( std::unique_ptr< IAccount > new_account );
+
 private:
 
 	UserInfo m_user_info; // user info
+
+	// accounts associated with this user
+	std::vector< std::unique_ptr< IAccount > > m_user_accounts;
 };
 
 // a node in a doubly linked list that manages a user object
