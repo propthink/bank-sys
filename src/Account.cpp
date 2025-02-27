@@ -2,7 +2,7 @@
 #include <random> // for random number generation
 
 // generates a random, unique account ID
-ACCOUNT_ID GENERATE_ACCOUNT_ID()
+Utils::ACCOUNT_ID GENERATE_ACCOUNT_ID()
 {
 	// get a random seed from the system
 	std::random_device random_device;
@@ -14,7 +14,7 @@ ACCOUNT_ID GENERATE_ACCOUNT_ID()
 	std::uniform_int_distribution<> rng_distribution( 100000000, 999999999 );
 
 	// store the generated account ID for comparison
-	ACCOUNT_ID new_account_id;
+	Utils::ACCOUNT_ID new_account_id;
 
 	// keep generating a new account ID until it is unique
 	do {
@@ -31,24 +31,24 @@ ACCOUNT_ID GENERATE_ACCOUNT_ID()
 }
 
 // tracks existing account IDs to enforce uniqueness
-std::unordered_set< ACCOUNT_ID > GENERATED_ACCOUNT_IDS;
+std::unordered_set< Utils::ACCOUNT_ID > GENERATED_ACCOUNT_IDS;
 
 // deallocate interface
 IAccount::~IAccount() { }
 
 // initialize the base account
-BAccount::BAccount( ACCOUNT_ID account_id, BankUtils::US_CENTS account_balance )
+BAccount::BAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS account_balance )
 
 	: m_account_id( account_id ), m_current_balance( account_balance ) { }
 
 // get the unique id associated with this account
-ACCOUNT_ID BAccount::getAccountId() const
+Utils::ACCOUNT_ID BAccount::getAccountId() const
 {
 	return m_account_id;
 }
 
 // get the current balance of this account
-BankUtils::US_CENTS BAccount::getAccountBalance() const
+Utils::US_CENTS BAccount::getAccountBalance() const
 {
 	return m_current_balance;
 }

@@ -1,34 +1,31 @@
 #ifndef USER_H
 #define USER_H
 
+#include "Utilities.h" // for utils
 #include "Account.h" // for accounts
-#include <cstdint> // for fixed-width integer types
 #include <unordered_set> // for std::unordered_set
 #include <string> // for std::string
 #include <memory> // for std::unique_ptr
 #include <vector> // for std::vector
 
-// a unique 6-digit identifier associated with a specific user
-typedef uint32_t USER_ID;
-
 // generates a random, unique user ID
-USER_ID GENERATE_USER_ID();
+Utils::USER_ID GENERATE_USER_ID();
 
 // tracks existing user IDs to enforce uniqueness
-extern std::unordered_set< USER_ID > GENERATED_USER_IDS;
+extern std::unordered_set< Utils::USER_ID > GENERATED_USER_IDS;
 
 // stores user information, including user id, name, phone, and email
 struct UserInfo
 {
 	UserInfo(
 	
-		USER_ID user_id, std::string full_name,
+		Utils::USER_ID user_id, std::string full_name,
 
 		std::string phone_number, std::string email_address
 
 		); // initialize user data
 
-	USER_ID m_user_id; // unique user id
+	Utils::USER_ID m_user_id; // unique user id
 
 	std::string m_full_name; // user full name
 
@@ -45,7 +42,7 @@ public:
 	User( const UserInfo& user_info ); // initialize user
 
 	// get the unique id associated with this user
-	USER_ID getUserId() const;
+	Utils::USER_ID getUserId() const;
 
 	// add an account to this user
 	void addAccount( std::unique_ptr< IAccount > new_account );
@@ -83,7 +80,7 @@ public:
 	void addUser( std::unique_ptr< User > user );
 
 	// search for a user by user id
-	UserNode* findUser( USER_ID user_id );
+	UserNode* findUser( Utils::USER_ID user_id );
 
 private:
 
