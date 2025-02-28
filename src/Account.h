@@ -26,6 +26,9 @@ public:
 	// get the current balance of this account
 	virtual Utils::US_CENTS getAccountBalance() const = 0;
 
+	// a short text-based description of the account type
+	virtual std::string getAccountType() const = 0;
+
 	// adds funds to the account; returns true if successful
 	virtual bool deposit( Utils::US_CENTS amount ) = 0;
 
@@ -34,9 +37,6 @@ public:
 
 	// print account details to the console
 	virtual void printAccount() const = 0;
-
-	// a short text-based description of the account type
-	virtual std::string accountTypeDesc() const = 0;
 };
 
 // base account class implementing IAccount interface
@@ -53,6 +53,9 @@ public:
 	// get the current balance of this account
 	virtual Utils::US_CENTS getAccountBalance() const override;
 
+	// a short text-based description of the account type
+	virtual std::string getAccountType() const override;
+
 	// adds funds to the account; returns true if successful
 	virtual bool deposit( Utils::US_CENTS deposit_amount ) override;
 
@@ -61,9 +64,6 @@ public:
 
 	// print account details to the console
 	virtual void printAccount() const override;
-
-	// a short text-based description of the account type
-	virtual std::string accountTypeDesc() const override;
 
 private:
 

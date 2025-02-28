@@ -56,6 +56,12 @@ Utils::US_CENTS BAccount::getAccountBalance() const
 	return m_current_balance;
 }
 
+// a short text-based description of the account type
+std::string BAccount::getAccountType() const
+{
+	return "BAccount";
+}
+
 // adds funds to the account; returns true if successful
 bool BAccount::deposit( Utils::US_CENTS amount )
 {
@@ -107,7 +113,7 @@ void BAccount::printAccount() const
 {
 	std::cout << "ACCOUNT ID: " << m_account_id;
 
-	std::cout << " | ACCOUNT TYPE: " << accountTypeDesc();
+	std::cout << " | ACCOUNT TYPE: " << getAccountType();
 
 	std::locale original_locale = std::cout.getloc(); // save current format
 
@@ -129,10 +135,4 @@ void BAccount::printAccount() const
 	{
 		m_transaction_log.printTransactionLog();
 	}
-}
-
-// a short text-based description of the account type
-std::string BAccount::accountTypeDesc() const
-{
-	return "BAccount";
 }
