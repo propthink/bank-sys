@@ -1,5 +1,5 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef UTILITY_H
+#define UTILITY_H
 
 #include <cstdint> // for fixed-width integer types
 
@@ -16,4 +16,4 @@ namespace Utils {
 	typedef uint32_t ACCOUNT_ID;
 }
 
-#endif // UTILITIES_H
+#endif // UTILITY_H

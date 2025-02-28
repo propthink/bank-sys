@@ -1,9 +1,10 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
-#include "Utilities.h" // for utils
+#include "Utility.h" // for utils
 #include "Transaction.h" // for TransactionHistory
 #include <unordered_set> // for std::unordered_set
+#include <string> // for std::string
 
 // generates a random, unique account ID
 Utils::ACCOUNT_ID GENERATE_ACCOUNT_ID();
@@ -32,10 +33,10 @@ public:
 	virtual bool withdraw( Utils::US_CENTS amount ) = 0;
 
 	// print account details to the console
-	virtual void printAccountInfo() const = 0;
+	virtual void printAccount() const = 0;
 
-	// prints the full transaction history to the console
-	virtual void printTransactionLog() const = 0;
+	// a short text-based description of the account type
+	virtual std::string accountTypeDesc() const = 0;
 };
 
 // base account class implementing IAccount interface
@@ -59,10 +60,10 @@ public:
 	virtual bool withdraw( Utils::US_CENTS withdraw_amount ) override;
 
 	// print account details to the console
-	virtual void printAccountInfo() const override;
+	virtual void printAccount() const override;
 
-	// print the entire transaction history for this account
-	virtual void printTransactionLog() const override;
+	// a short text-based description of the account type
+	virtual std::string accountTypeDesc() const override;
 
 private:
 

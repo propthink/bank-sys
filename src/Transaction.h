@@ -1,7 +1,7 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include "Utilities.h" // for utils
+#include "Utility.h" // for utils
 #include <string> // for std::string
 #include <memory> // for std::unique_ptr
 
@@ -58,6 +58,9 @@ public:
 
 	// print the entire transaction log
 	void printTransactionLog() const;
+
+	// checks if the transaction log is empty
+	bool isEmpty() const;
 
 private:
 

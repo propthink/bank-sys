@@ -45,6 +45,18 @@ UserInfo::UserInfo(
 
 	m_phone_number( phone_number ), m_email_address( email_address ) { }
 
+// format and print user info to console
+void UserInfo::printUserInfo() const
+{
+	std::cout << "USER ID: " << m_user_id;
+
+	std::cout << " | NAME: " << m_full_name;
+
+	std::cout << " | PHONE: " << m_phone_number;
+
+	std::cout << " | EMAIL: " << m_email_address << '\n';
+}
+
 // default password for testing purposes
 Authenticator::Authenticator( const std::string& user_password )
 
@@ -81,6 +93,12 @@ User::User( const UserInfo& user_info,
 
 	: m_user_info( user_info ), m_user_accounts( std::move( user_accounts ) ) { }
 
+// get the unique id associated with this user
+Utils::USER_ID User::getUserId() const
+{
+	return m_user_info.m_user_id;
+}
+
 // add new account to user
 bool User::addAccount( std::unique_ptr< IAccount > new_account )
 {
@@ -96,10 +114,80 @@ bool User::addAccount( std::unique_ptr< IAccount > new_account )
 	return true;
 }
 
-// get the unique id associated with this user
-Utils::USER_ID User::getUserId() const
+// delete existing account from user
+bool User::deleteAccount( Utils::ACCOUNT_ID account_id )
 {
-	return m_user_info.m_user_id;
+	// unlock the user if the correct password is provided
+	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
+	{
+		// if the user is locked and the password is incorrect
+		return false;
+	}
+	// if unlocked or already unlocked, find the account by id
+	for( auto it = m_user_accounts.begin(); it != m_user_accounts.end(); ++it )
+	{
+		if( ( *it ) -> getAccountId() == account_id )
+		{
+			m_user_accounts.erase( it ); // delete the account
+
+			return true;
+		}
+	}
+	return false; // account not found
+}
+
+// deposits a specified amount into an account
+bool User::depositToAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount )
+{
+	// unlock the user if the correct password is provided
+	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
+	{
+		// if the user is locked and the password is incorrect
+		return false;
+	}
+	// find the account by ID and deposit the amount
+	for( auto& account : m_user_accounts )
+	{
+		if( account -> getAccountId() == account_id )
+		{
+			return account -> deposit( amount );
+		}
+	}
+	return false; // account not found
+}
+
+// withdraws a specified amount from an account
+bool User::withdrawFromAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount )
+{
+	// unlock the user if the correct password is provided
+	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
+	{
+		// if the user is locked and the password is incorrect
+		return false;
+	}
+	// find the account by ID and withdraw the amount
+	for( auto& account : m_user_accounts )
+	{
+		if( account -> getAccountId() == account_id )
+		{
+			return account -> withdraw( amount );
+		}
+	}
+	return false; // account not found
+}
+
+// prints all user info, including personal details, accounts, and transactions
+void User::printUser() const
+{
+	m_user_info.printUserInfo();
+
+	if( !m_user_accounts.empty() )
+	{
+		for( auto& account : m_user_accounts )
+		{
+			account -> printAccount();
+		}
+	}
 }
 
 // initialize node with user

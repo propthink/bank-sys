@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-#include "Utilities.h" // for utils
+#include "Utility.h" // for utils
 #include "Account.h" // for accounts
 #include <unordered_set> // for std::unordered_set
 #include <string> // for std::string
@@ -25,6 +25,9 @@ struct UserInfo
 		std::string phone_number, std::string email_address
 
 		);
+
+	// format and print user info to console
+	void printUserInfo() const;
 
 	Utils::USER_ID m_user_id; // unique user id
 
@@ -68,11 +71,23 @@ public:
 		
 		std::vector< std::unique_ptr< IAccount > > user_accounts = {} );
 
+	// get the unique id associated with this user
+	Utils::USER_ID getUserId() const;
+
 	// add new account to user
 	bool addAccount( std::unique_ptr< IAccount > new_account );
 
-	// get the unique id associated with this user
-	Utils::USER_ID getUserId() const;
+	// delete existing account from user
+	bool deleteAccount( Utils::ACCOUNT_ID account_id );
+
+	// deposits a specified amount into an account
+	bool depositToAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount );
+
+	// withdraws a specified amount from an account
+	bool withdrawFromAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount );
+
+	// prints all user info, including personal details, accounts, and transactions
+	void printUser() const;
 
 private:
 

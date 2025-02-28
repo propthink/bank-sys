@@ -103,9 +103,11 @@ bool BAccount::withdraw( Utils::US_CENTS amount )
 }
 
 // print account details to the console
-void BAccount::printAccountInfo() const
+void BAccount::printAccount() const
 {
-	std::cout << "ACCOUNT #: " << m_account_id;
+	std::cout << "ACCOUNT ID: " << m_account_id;
+
+	std::cout << " | ACCOUNT TYPE: " << accountTypeDesc();
 
 	std::locale original_locale = std::cout.getloc(); // save current format
 
@@ -122,10 +124,15 @@ void BAccount::printAccountInfo() const
 		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
 
 	std::cout.imbue( original_locale ); // restore the original format
+
+	if( !m_transaction_log.isEmpty() )
+	{
+		m_transaction_log.printTransactionLog();
+	}
 }
 
-// prints the full transaction history to the console
-void BAccount::printTransactionLog() const
+// a short text-based description of the account type
+std::string BAccount::accountTypeDesc() const
 {
-	m_transaction_log.printTransactionLog();
+	return "BAccount";
 }

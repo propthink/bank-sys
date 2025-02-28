@@ -137,3 +137,9 @@ void TransactionLog::printTransactionLog() const
 		current_transaction = current_transaction -> m_next.get(); // step
 	}
 }
+
+// checks if the transaction log is empty
+bool TransactionLog::isEmpty() const
+{
+	return m_head == nullptr;
+}
