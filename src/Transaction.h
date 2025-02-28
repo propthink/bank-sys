@@ -46,25 +46,25 @@ public:
 };
 
 // manages a doubly linked list of transactions
-class TransactionHistory
+class TransactionLog
 {
 public:
 
-	// initialize transaction history
-	TransactionHistory();
+	// initialize transaction log
+	TransactionLog();
 
 	// add a new transaction at the end of the list
 	void addTransaction( const Transaction& transaction );
 
-	// print the entire transaction history
-	void printTransactionHistory() const;
+	// print the entire transaction log
+	void printTransactionLog() const;
 
 private:
 
-	// head of the list
+	// head of the log
 	std::unique_ptr< TransactionNode > m_head;
 
-	// tail of the list
+	// tail of the log
 	TransactionNode* m_tail;
 };
 

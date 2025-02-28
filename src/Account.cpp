@@ -1,5 +1,8 @@
 #include "Account.h"
 #include <random> // for random number generation
+#include <iostream> // for std::cout
+#include <locale> // for std::locale, std::imbue
+#include <iomanip> // for std::put_money
 
 // generates a random, unique account ID
 Utils::ACCOUNT_ID GENERATE_ACCOUNT_ID()
@@ -51,4 +54,78 @@ Utils::ACCOUNT_ID BAccount::getAccountId() const
 Utils::US_CENTS BAccount::getAccountBalance() const
 {
 	return m_current_balance;
+}
+
+// adds funds to the account; returns true if successful
+bool BAccount::deposit( Utils::US_CENTS amount )
+{
+	// check if the deposit amount is valid
+	if( amount <= 0 )
+	{
+		// invalid deposit amount
+		return false;
+	}
+	// update the balance
+	m_current_balance += amount;
+
+	// log the deposit transaction
+	m_transaction_log.addTransaction(
+
+		Transaction( m_account_id, amount )
+	);
+	return true; // return
+}
+
+// deducts funds from the account; returns true if successful
+bool BAccount::withdraw( Utils::US_CENTS amount )
+{
+	// check if the withdraw amount is valid
+	if( amount <= 0 )
+	{
+		// invalid withdraw amount
+		return false;
+	}
+	//// check if balance is sufficient for the withdrawal
+	//if( m_current_balance < amount )
+	//{
+	//	// insufficient funds
+	//	return false;
+	//}
+	// update the balance after withdrawal
+	m_current_balance -= amount;
+
+	// log the withdrawal transaction
+	m_transaction_log.addTransaction(
+
+		Transaction( m_account_id, -amount )
+	);
+	return true; // return
+}
+
+// print account details to the console
+void BAccount::printAccountInfo() const
+{
+	std::cout << "ACCOUNT #: " << m_account_id;
+
+	std::locale original_locale = std::cout.getloc(); // save current format
+
+	std::cout.imbue( std::locale( "en_US.UTF-8" ) ); // format output
+
+	//std::cout << " | BALANCE: " << ( m_current_balance < 0 ? "-$" : "$" )
+
+		//<< std::put_money( std::abs( m_current_balance ) );
+
+	std::cout << " | BALANCE: " << ( m_current_balance < 0 ? "$(" : "$" )
+
+		<< std::put_money( std::abs( m_current_balance ) )
+
+		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
+
+	std::cout.imbue( original_locale ); // restore the original format
+}
+
+// prints the full transaction history to the console
+void BAccount::printTransactionLog() const
+{
+	m_transaction_log.printTransactionLog();
 }

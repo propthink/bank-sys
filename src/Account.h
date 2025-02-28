@@ -2,6 +2,7 @@
 #define ACCOUNT_H
 
 #include "Utilities.h" // for utils
+#include "Transaction.h" // for TransactionHistory
 #include <unordered_set> // for std::unordered_set
 
 // generates a random, unique account ID
@@ -23,6 +24,18 @@ public:
 
 	// get the current balance of this account
 	virtual Utils::US_CENTS getAccountBalance() const = 0;
+
+	// adds funds to the account; returns true if successful
+	virtual bool deposit( Utils::US_CENTS amount ) = 0;
+
+	// deducts funds from the account; returns true if successful
+	virtual bool withdraw( Utils::US_CENTS amount ) = 0;
+
+	// print account details to the console
+	virtual void printAccountInfo() const = 0;
+
+	// prints the full transaction history to the console
+	virtual void printTransactionLog() const = 0;
 };
 
 // base account class implementing IAccount interface
@@ -39,6 +52,18 @@ public:
 	// get the current balance of this account
 	virtual Utils::US_CENTS getAccountBalance() const override;
 
+	// adds funds to the account; returns true if successful
+	virtual bool deposit( Utils::US_CENTS deposit_amount ) override;
+
+	// deducts funds from the account; returns true if successful
+	virtual bool withdraw( Utils::US_CENTS withdraw_amount ) override;
+
+	// print account details to the console
+	virtual void printAccountInfo() const override;
+
+	// print the entire transaction history for this account
+	virtual void printTransactionLog() const override;
+
 private:
 
 	// unique account id
@@ -46,6 +71,9 @@ private:
 
 	// account balance
 	Utils::US_CENTS m_current_balance;
+
+	// stores the history of all transactions for this account
+	TransactionLog m_transaction_log;
 };
 
 #endif // ACCOUNT_H

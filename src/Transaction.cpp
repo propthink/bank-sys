@@ -86,12 +86,12 @@ TransactionNode::TransactionNode( const Transaction& transaction )
 	m_next( nullptr ), m_prev( nullptr ) { }
 
 // initialize
-TransactionHistory::TransactionHistory()
+TransactionLog::TransactionLog()
 
 	: m_head( nullptr ), m_tail( nullptr ) { }
 
 // add a new transaction at the end of the list
-void TransactionHistory::addTransaction( const Transaction& transaction )
+void TransactionLog::addTransaction( const Transaction& transaction )
 {
 	// create a new node to store the transaction
 	auto new_node = std::make_unique< TransactionNode >( transaction );
@@ -118,7 +118,7 @@ void TransactionHistory::addTransaction( const Transaction& transaction )
 }
 
 // print the entire transaction history
-void TransactionHistory::printTransactionHistory() const
+void TransactionLog::printTransactionLog() const
 {
 	// check if the list is empty
 	if( !m_head )
