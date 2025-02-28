@@ -35,19 +35,44 @@ struct UserInfo
 	std::string m_email_address; // user email address
 };
 
+// handles user authentication to lock/unlock user based on password evaluation
+class Authenticator
+{
+public:
+
+	// default password for testing purposes
+	Authenticator( const std::string& user_password = "password" );
+
+	// unlock the user if the correct password is provided
+	bool unlock();
+
+	// check if the user is locked
+	bool isLocked() const;
+
+private:
+
+	// plain-text password for testing purposes
+	std::string m_user_password;
+
+	// user locked by default
+	bool m_is_locked = true;
+};
+
 // represents a user with personal information
 class User
 {
 public:
 
 	// initialize user
-	User( const UserInfo& user_info );
+	User( const UserInfo& user_info, 
+		
+		std::vector< std::unique_ptr< IAccount > > user_accounts = {} );
+
+	// add new account to user
+	bool addAccount( std::unique_ptr< IAccount > new_account );
 
 	// get the unique id associated with this user
 	Utils::USER_ID getUserId() const;
-
-	// add an account to this user
-	void addAccount( std::unique_ptr< IAccount > new_account );
 
 private:
 
@@ -56,6 +81,9 @@ private:
 
 	// accounts associated with this user
 	std::vector< std::unique_ptr< IAccount > > m_user_accounts;
+
+	// lock/unlock user based on password evaluation
+	Authenticator m_user_authenticator;
 };
 
 // a node in a doubly linked list that manages a user object

@@ -1,5 +1,6 @@
 #include "User.h"
 #include <random> // for random number generation
+#include <iostream> // for std::cout and std::cin
 
 // generates a random, unique user ID
 Utils::USER_ID GENERATE_USER_ID()
@@ -44,21 +45,61 @@ UserInfo::UserInfo(
 
 	m_phone_number( phone_number ), m_email_address( email_address ) { }
 
-// initialize user
-User::User( const UserInfo& user_info )
+// default password for testing purposes
+Authenticator::Authenticator( const std::string& user_password )
 
-	: m_user_info( user_info ) { }
+	: m_user_password( user_password ) { }
+
+// unlock the user if the correct password is provided
+bool Authenticator::unlock()
+{
+	std::string user_input = "";
+
+	std::cout << "Enter Password: ";
+	
+	std::cin >> user_input;
+
+	if( user_input == m_user_password )
+	{
+		m_is_locked = false;
+
+		return true;
+	}
+	return false;
+}
+
+// check if the user is locked
+bool Authenticator::isLocked() const
+{
+	return m_is_locked;
+}
+
+// initialize user
+User::User( const UserInfo& user_info, 
+	
+	std::vector< std::unique_ptr< IAccount > > user_accounts )
+
+	: m_user_info( user_info ), m_user_accounts( std::move( user_accounts ) ) { }
+
+// add new account to user
+bool User::addAccount( std::unique_ptr< IAccount > new_account )
+{
+	// unlock the user if the correct password is provided
+	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
+	{
+		// if the user is locked and the password is incorrect
+		return false;
+	}
+	// if unlocked or already unlocked, add the account to the user
+	m_user_accounts.push_back( std::move( new_account ) );
+
+	return true;
+}
 
 // get the unique id associated with this user
 Utils::USER_ID User::getUserId() const
 {
 	return m_user_info.m_user_id;
-}
-
-// add an account to this user
-void User::addAccount( std::unique_ptr< IAccount > new_account )
-{
-	m_user_accounts.push_back( std::move( new_account ) );
 }
 
 // initialize node with user
