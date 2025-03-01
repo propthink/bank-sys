@@ -40,7 +40,7 @@ std::unordered_set< Utils::ACCOUNT_ID > GENERATED_ACCOUNT_IDS;
 IAccount::~IAccount() { }
 
 // initialize the base account
-BAccount::BAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS account_balance )
+BAccount::BAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS account_balance )
 
 	: m_account_id( account_id ), m_current_balance( account_balance ) { }
 
@@ -63,7 +63,7 @@ std::string BAccount::getAccountType() const
 }
 
 // adds funds to the account; returns true if successful
-bool BAccount::deposit( Utils::US_CENTS amount )
+bool BAccount::deposit( const Utils::US_CENTS amount )
 {
 	// check if the deposit amount is valid
 	if( amount <= 0 )
@@ -83,7 +83,7 @@ bool BAccount::deposit( Utils::US_CENTS amount )
 }
 
 // deducts funds from the account; returns true if successful
-bool BAccount::withdraw( Utils::US_CENTS amount )
+bool BAccount::withdraw( const Utils::US_CENTS amount )
 {
 	// check if the withdraw amount is valid
 	if( amount <= 0 )
@@ -135,4 +135,34 @@ void BAccount::printAccount() const
 	{
 		m_transaction_log.printTransactionLog();
 	}
+}
+
+// overloaded operator adds funds to the account
+BAccount& BAccount::operator +=( const Utils::US_CENTS deposit_amount )
+{
+	// attempt to deposit money
+	if( !deposit( deposit_amount ) )
+	{
+		// deposit failed
+	}
+	return *this;
+}
+
+// overloaded operator deducts funds from the account
+BAccount& BAccount::operator -=( const Utils::US_CENTS withdraw_amount )
+{
+	// attempt to withdraw money
+	if( !withdraw( withdraw_amount ) )
+	{
+		// withdrawal failed
+	}
+	return *this;
+}
+
+// print account details to the output stream
+std::ostream& operator<<( std::ostream& output_stream, const BAccount& account )
+{
+	account.printAccount();
+
+	return output_stream; // return the output stream
 }

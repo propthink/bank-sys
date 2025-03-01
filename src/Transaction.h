@@ -11,7 +11,7 @@ class Transaction
 public:
 
 	// initialize transaction
-	Transaction( Utils::ACCOUNT_ID account_id, Utils::US_CENTS transaction_amount );
+	Transaction( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS transaction_amount );
 
 	// print the transaction details to the console
 	void printTransaction() const;

@@ -20,9 +20,9 @@ struct UserInfo
 	// initialize user data
 	UserInfo(
 	
-		Utils::USER_ID user_id, std::string full_name,
+		const Utils::USER_ID user_id, const std::string full_name,
 
-		std::string phone_number, std::string email_address
+		const std::string phone_number, const std::string email_address
 
 		);
 
@@ -78,13 +78,13 @@ public:
 	bool addAccount( std::unique_ptr< IAccount > new_account );
 
 	// delete existing account from user
-	bool deleteAccount( Utils::ACCOUNT_ID account_id );
+	bool deleteAccount( const Utils::ACCOUNT_ID account_id );
 
 	// deposits a specified amount into an account
-	bool depositToAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount );
+	bool depositToAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS amount );
 
 	// withdraws a specified amount from an account
-	bool withdrawFromAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount );
+	bool withdrawFromAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS amount );
 
 	// prints all user info, including personal details, accounts, and transactions
 	void printUser() const;
@@ -131,7 +131,7 @@ public:
 	void addUser( std::unique_ptr< User > user );
 
 	// search for a user by user id
-	UserNode* findUser( Utils::USER_ID user_id );
+	UserNode* findUser( const Utils::USER_ID user_id );
 
 private:
 

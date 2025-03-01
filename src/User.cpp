@@ -37,9 +37,9 @@ std::unordered_set< Utils::USER_ID > GENERATED_USER_IDS;
 // initialize user data
 UserInfo::UserInfo(
 
-	Utils::USER_ID user_id, std::string full_name,
+	const Utils::USER_ID user_id, const std::string full_name,
 
-	std::string phone_number, std::string email_address )
+	const std::string phone_number, const std::string email_address )
 
 	: m_user_id( user_id ), m_full_name( full_name ),
 
@@ -115,7 +115,7 @@ bool User::addAccount( std::unique_ptr< IAccount > new_account )
 }
 
 // delete existing account from user
-bool User::deleteAccount( Utils::ACCOUNT_ID account_id )
+bool User::deleteAccount( const Utils::ACCOUNT_ID account_id )
 {
 	// unlock the user if the correct password is provided
 	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
@@ -137,7 +137,7 @@ bool User::deleteAccount( Utils::ACCOUNT_ID account_id )
 }
 
 // deposits a specified amount into an account
-bool User::depositToAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount )
+bool User::depositToAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS amount )
 {
 	// unlock the user if the correct password is provided
 	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
@@ -157,7 +157,7 @@ bool User::depositToAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amoun
 }
 
 // withdraws a specified amount from an account
-bool User::withdrawFromAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS amount )
+bool User::withdrawFromAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS amount )
 {
 	// unlock the user if the correct password is provided
 	if( m_user_authenticator.isLocked() && !m_user_authenticator.unlock() )
@@ -229,7 +229,7 @@ void UserRegistry::addUser( std::unique_ptr< User > user )
 }
 
 // search for a user by user id
-UserNode* UserRegistry::findUser( Utils::USER_ID user_id )
+UserNode* UserRegistry::findUser( const Utils::USER_ID user_id )
 {
 	// start from the head of the list
 	UserNode* current_node = m_head.get();

@@ -30,10 +30,10 @@ public:
 	virtual std::string getAccountType() const = 0;
 
 	// adds funds to the account; returns true if successful
-	virtual bool deposit( Utils::US_CENTS amount ) = 0;
+	virtual bool deposit( const Utils::US_CENTS amount ) = 0;
 
 	// deducts funds from the account; returns true if successful
-	virtual bool withdraw( Utils::US_CENTS amount ) = 0;
+	virtual bool withdraw( const Utils::US_CENTS amount ) = 0;
 
 	// print account details to the console
 	virtual void printAccount() const = 0;
@@ -45,7 +45,7 @@ class BAccount : public IAccount
 public:
 
 	// initialize the base account
-	BAccount( Utils::ACCOUNT_ID account_id, Utils::US_CENTS account_balance = 0 );
+	BAccount( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS account_balance = 0 );
 
 	// get the unique id associated with this account
 	virtual Utils::ACCOUNT_ID getAccountId() const override;
@@ -57,13 +57,22 @@ public:
 	virtual std::string getAccountType() const override;
 
 	// adds funds to the account; returns true if successful
-	virtual bool deposit( Utils::US_CENTS deposit_amount ) override;
+	virtual bool deposit( const Utils::US_CENTS deposit_amount ) override;
 
 	// deducts funds from the account; returns true if successful
-	virtual bool withdraw( Utils::US_CENTS withdraw_amount ) override;
+	virtual bool withdraw( const Utils::US_CENTS withdraw_amount ) override;
 
 	// print account details to the console
 	virtual void printAccount() const override;
+
+	// overloaded operator adds funds to the account
+	BAccount& operator +=( const Utils::US_CENTS deposit_amount );
+
+	// overloaded operator deducts funds from the account
+	BAccount& operator -=( const Utils::US_CENTS withdraw_amount );
+
+	// print account details to the output stream
+	friend std::ostream& operator<<( std::ostream& output_stream, const BAccount& account );
 
 private:
 

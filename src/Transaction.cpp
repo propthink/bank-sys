@@ -35,7 +35,7 @@ std::string generateTimestamp()
 }
 
 // initialize transaction
-Transaction::Transaction( Utils::ACCOUNT_ID account_id, Utils::US_CENTS transaction_amount )
+Transaction::Transaction( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS transaction_amount )
 
 	: m_account_id( account_id ), m_amount( transaction_amount )
 {
@@ -55,7 +55,7 @@ Transaction::Transaction( Utils::ACCOUNT_ID account_id, Utils::US_CENTS transact
 // print the transaction details to the console
 void Transaction::printTransaction() const
 {
-	std::cout << "ACCOUNT #: " << m_account_id;
+	std::cout << "ACCOUNT ID: " << m_account_id;
 
 	std::locale original_locale = std::cout.getloc(); // save current format
 
