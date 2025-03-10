@@ -3,7 +3,6 @@
 
 #include "Common.h" // bank_sys namespace
 #include "Authenticator.h" // Authenticator
-#include <cstdint> // uint32_t
 #include <unordered_set> // std::unordered_set
 #include <string> // std::string
 

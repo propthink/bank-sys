@@ -1,8 +1,11 @@
 #include "Transaction.h" // implementing Transaction
-#include <chrono> // for std::chrono
-#include <sstream> // for std::ostringstream
-#include <iomanip> // for std::put_time
+#include <chrono> // std::chrono
+#include <sstream> // std::ostringstream
+#include <iomanip> // std::put_time, std::put_money
+
 #include <iostream> // TEST PRINT
+#include <locale> // std::locale, std::imbue
+#include <cmath> // std::abs
 
 // generates a timestamp string based on the current local time
 std::string generateTimestamp()

@@ -2,6 +2,7 @@
 #define BACCOUNT_H
 
 #include "IAccount.h" // account interface
+#include "TransactionRegistry.h" // TransactionRegistry
 #include <unordered_set> // std::unordered_set
 
 // an abstract base class for shared implementation between derived account types
@@ -21,8 +22,14 @@ public:
 	// deallocate account
 	~BAccount() override = default;
 
-	// get the unique id associated with this account
-	bank_sys::ACCOUNT_ID getAccountId() const override;
+	// deposit money into the account
+	bool deposit( bank_sys::US_CENTS deposit_amount ) override;
+
+	// withdraw money from the account
+	bool withdraw( bank_sys::US_CENTS withdrawal_amount ) override;
+
+	// TEST_PRINT
+	void TEST_PRINT() const override;
 
 private:
 
@@ -31,6 +38,9 @@ private:
 
 	// the current balance of this account
 	bank_sys::US_CENTS m_current_balance;
+
+	// the transaction history associated with this account
+	TransactionRegistry m_transaction_registry;
 };
 
 #endif // BACCOUNT_H

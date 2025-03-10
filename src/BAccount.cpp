@@ -1,5 +1,10 @@
 #include "BAccount.h" // implementing BAccount
-#include <random> // for random number generation
+#include <random> // random number generation
+
+#include <iostream> // TEST PRINT
+#include <iomanip> // std::put_money
+#include <locale> // std::locale, std::imbue
+#include <cmath> // std::abs
 
 // generates a random, unique account ID
 bank_sys::ACCOUNT_ID BAccount::GENERATE_ACCOUNT_ID()
@@ -39,8 +44,65 @@ BAccount::BAccount()
 
 	: m_account_id( BAccount::GENERATE_ACCOUNT_ID() ), m_current_balance( 0 ) { }
 
-// get the unique id associated with this account
-bank_sys::ACCOUNT_ID BAccount::getAccountId() const
+// deposit money into the account
+bool BAccount::deposit( bank_sys::US_CENTS deposit_amount )
 {
-	return m_account_id;
+	// reject invalid deposits
+	if( deposit_amount <= 0 )
+	{
+		return false;
+	}
+	// add the deposit amount to the current balance
+	m_current_balance += deposit_amount;
+
+	// log the transaction
+	m_transaction_registry.insertTransaction( Transaction( m_account_id, deposit_amount ) );
+
+	return true;
+}
+
+// withdraw money from the account
+bool BAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
+{
+	// reject invalid withdrawals
+	if( withdrawal_amount <= 0 )
+	{
+		return false;
+	}
+	// insufficient funds
+	//if( withdrawal_amount > m_current_balance )
+	//{
+		//return false;
+	//}
+	// subtract the withdrawal amount from the current balance
+	m_current_balance -= withdrawal_amount;
+
+	// log the transaction
+	m_transaction_registry.insertTransaction( Transaction( m_account_id, -withdrawal_amount ) );
+
+	return true;
+}
+
+// TEST_PRINT
+void BAccount::TEST_PRINT() const
+{
+	std::cout << "ACCOUNT ID: ";
+
+	std::cout << m_account_id;
+
+	std::cout << " | CURRENT BALANCE: ";
+
+	std::locale original_locale = std::cout.getloc(); // save current format
+
+	std::cout.imbue( std::locale( "en_US.UTF-8" ) ); // format output
+
+	std::cout << ( m_current_balance < 0 ? "$(" : "$" )
+
+		<< std::put_money( std::abs( m_current_balance ) )
+
+		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
+
+	std::cout.imbue( original_locale ); // restore the original format
+
+	m_transaction_registry.TEST_PRINT();
 }

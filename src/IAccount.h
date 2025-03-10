@@ -14,8 +14,14 @@ public:
 	// deallocate account
 	virtual ~IAccount() = default;
 
-	// get the unique id associated with this account
-	virtual bank_sys::ACCOUNT_ID getAccountId() const = 0;
+	// deposit money into the account
+	virtual bool deposit( bank_sys::US_CENTS deposit_amount ) = 0;
+
+	// withdraw money from the account
+	virtual bool withdraw( bank_sys::US_CENTS withdrawal_amount ) = 0;
+
+	// TEST_PRINT
+	virtual void TEST_PRINT() const = 0;
 };
 
 #endif // IACCOUNT_H
