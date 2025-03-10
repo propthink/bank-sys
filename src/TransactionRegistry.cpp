@@ -1,0 +1,57 @@
+#include "TransactionRegistry.h" // implementing TransactionRegistry
+
+// initialize transaction registry
+TransactionRegistry::TransactionRegistry()
+
+	: m_head( nullptr ), m_tail( nullptr ) { }
+
+// add a new transaction to the registry
+void TransactionRegistry::insertTransaction( Transaction&& transaction )
+{
+	// initialize transaction node
+	auto new_node = std::make_unique< TransactionNode >( std::move( transaction ) );
+
+	// check if the list is empty
+	if( m_head == nullptr )
+	{
+		// set the head to the new node
+		m_head = std::move( new_node );
+
+		// set the tail to the head
+		m_tail = m_head.get();
+
+	}
+	else
+	{
+		// set the current tail's next pointer to the new node
+		m_tail -> m_next = std::move( new_node );
+
+		// set the prev pointer of the new tail to the old tail
+		m_tail -> m_next -> m_prev = m_tail;
+
+		// update the tail to the new node
+		m_tail = m_tail -> m_next.get();
+	}
+}
+
+// TEST PRINT
+void TransactionRegistry::TEST_PRINT() const
+{
+	auto current_node = m_head.get();
+
+	while( current_node )
+	{
+		if( current_node -> m_user )
+		{
+			current_node -> m_user -> TEST_PRINT();
+		}
+		current_node = current_node -> m_next.get();
+	}
+}
+
+// initialize transaction node
+TransactionRegistry::TransactionNode::TransactionNode( Transaction&& transaction )
+
+	: m_user( std::make_unique< Transaction >( std::move( transaction ) ) ),
+
+	m_next( nullptr ), m_prev( nullptr ) { }

@@ -1,11 +1,8 @@
-#include "Transaction.h"
+#include "Transaction.h" // implementing Transaction
 #include <chrono> // for std::chrono
-#include <ctime> // for localtime_s
 #include <sstream> // for std::ostringstream
-#include <iomanip> // for std::put_time and std::put_money
-#include <iostream> // for std::cout and std::locale
-#include <locale> // for std::locale and std::imbue
-#include <cstdlib> // for std::abs (used for absolute value)
+#include <iomanip> // for std::put_time
+#include <iostream> // TEST PRINT
 
 // generates a timestamp string based on the current local time
 std::string generateTimestamp()
@@ -34,26 +31,25 @@ std::string generateTimestamp()
 	return timestamp_str;
 }
 
-// initialize transaction
-Transaction::Transaction( const Utils::ACCOUNT_ID account_id, const Utils::US_CENTS transaction_amount )
+// initialize the transaction
+Transaction::Transaction( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS transaction_amount )
 
 	: m_account_id( account_id ), m_amount( transaction_amount )
 {
-	// generate description
+	// invalid transaction
 	if( transaction_amount == 0 )
 	{
-		// TODO: invalid transaction
+		// handle error
 	}
-	else
-	{
-		m_description = ( transaction_amount < 0 ) ? "Withdraw" : "Deposit";
-	}
+	// generate text description
+	m_description = ( transaction_amount < 0 ) ? "Withdrawal" : "Deposit";
+
 	// generate timestamp
 	m_timestamp = generateTimestamp();
 }
 
-// print the transaction details to the console
-void Transaction::printTransaction() const
+// TEST PRINT
+void Transaction::TEST_PRINT() const
 {
 	std::cout << "ACCOUNT ID: " << m_account_id;
 
@@ -76,70 +72,4 @@ void Transaction::printTransaction() const
 	std::cout << " | DESC: " << m_description;
 
 	std::cout << " | TIME: " << m_timestamp << '\n';
-}
-
-// initialize transaction node
-TransactionNode::TransactionNode( const Transaction& transaction )
-
-	: m_transaction( std::make_unique< Transaction >( transaction ) ),
-
-	m_next( nullptr ), m_prev( nullptr ) { }
-
-// initialize
-TransactionLog::TransactionLog()
-
-	: m_head( nullptr ), m_tail( nullptr ) { }
-
-// add a new transaction at the end of the list
-void TransactionLog::addTransaction( const Transaction& transaction )
-{
-	// create a new node to store the transaction
-	auto new_node = std::make_unique< TransactionNode >( transaction );
-
-	// if the list is empty...
-	if( !m_head )
-	{
-		// make the new node both the head and tail
-		m_head = std::move( new_node );
-
-		m_tail = m_head.get();
-	}
-	else // add the new node at the end of the list
-	{
-		// attach the new node to the current tail
-		m_tail -> m_next = std::move( new_node );
-
-		// the prev pointer of the new node is the current tail
-		m_tail -> m_next -> m_prev = m_tail;
-
-		// update the tail pointer to the newly added node
-		m_tail = m_tail -> m_next.get();
-	}
-}
-
-// print the entire transaction history
-void TransactionLog::printTransactionLog() const
-{
-	// check if the list is empty
-	if( !m_head )
-	{
-		// there is nothing to print
-		return;
-	}
-	// start from the head of the list
-	TransactionNode* current_transaction = m_head.get();
-
-	// iterate through the list and print each transaction
-	while( current_transaction )
-	{
-		current_transaction -> m_transaction -> printTransaction(); // print transaction details
-
-		current_transaction = current_transaction -> m_next.get(); // step
-	}
-}
-
-// checks if the transaction log is empty
-bool TransactionLog::isEmpty() const
-{
-	return m_head == nullptr;
 }
