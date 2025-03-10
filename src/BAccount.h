@@ -22,6 +22,9 @@ public:
 	// deallocate account
 	~BAccount() override = default;
 
+	// get the unique id associated with this account
+	bank_sys::USER_ID getAccountId() const override;
+
 	// deposit money into the account
 	bool deposit( bank_sys::US_CENTS deposit_amount ) override;
 

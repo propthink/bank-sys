@@ -72,3 +72,69 @@ void User::lockAuthenticator()
 {
 	m_authenticator.lock();
 }
+
+// add a new account to this user
+void User::addAccount( IAccount&& new_account )
+{
+	// iterate through the vector of accounts
+	for( const auto& current_account : m_user_accounts )
+	{
+		// check if the account already exists
+		if( current_account.get() -> getAccountId() == new_account.getAccountId() )
+		{
+			return; // account already exists, exit without adding
+		}
+	}
+	// add the new account to this user
+	m_user_accounts.push_back( std::make_unique< IAccount >( std::move( new_account ) ) );
+}
+
+// remove an existing account from this user
+bool User::removeAccount( bank_sys::ACCOUNT_ID account_id )
+{
+	// iterate through the vector of accounts
+	for( auto it = m_user_accounts.begin(); it != m_user_accounts.end(); ++it )
+	{
+		// if the current account id matches the input account id
+		if( it -> get() -> getAccountId() == account_id )
+		{
+			// account found, remove it from the vector
+			m_user_accounts.erase( it );
+
+			return true; // account was removed
+		}
+	}
+	return false; // account not found
+}
+
+// deposit money into an account associated with this user
+bool User::depositToAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS deposit_amount )
+{
+	// iterate through the vector of accounts
+	for( auto& current_account : m_user_accounts )
+	{
+		// find the account associated with the input account id
+		if( current_account.get() -> getAccountId() == account_id )
+		{
+			// delegate the deposit to the account
+			return( current_account.get() -> deposit( deposit_amount ) );
+		}
+	}
+	return false; // account not found
+}
+
+// withdraw money from an account associated with this user
+bool User::withdrawFromAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS withdrawal_amount )
+{
+	// iterate through the vector of accounts
+	for( auto& current_account : m_user_accounts )
+	{
+		// find the account associated with the input account id
+		if( current_account.get() -> getAccountId() == account_id )
+		{
+			// delegate the withdrawal to the account
+			return( current_account.get() -> withdraw( withdrawal_amount ) );
+		}
+	}
+	return false; // account not found
+}

@@ -3,8 +3,11 @@
 
 #include "Common.h" // bank_sys namespace
 #include "Authenticator.h" // Authenticator
+#include "IAccount.h" // account interface
 #include <unordered_set> // std::unordered_set
 #include <string> // std::string
+#include <vector> // std::vector
+#include <memory> // std::unique_ptr
 
 // represents a single user with personal information and account details
 class User
@@ -48,6 +51,18 @@ public:
 	// manually locks the authenticator
 	void lockAuthenticator();
 
+	// add a new account to this user
+	void addAccount( IAccount&& new_account );
+
+	// remove an existing account from this user
+	bool removeAccount( bank_sys::ACCOUNT_ID account_id );
+
+	// deposit money into an account associated with this user
+	bool depositToAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS deposit_amount );
+
+	// withdraw money from an account associated with this user
+	bool withdrawFromAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS withdrawal_amount );
+
 private:
 
 	// basic user information
@@ -55,6 +70,9 @@ private:
 
 	// handles user authentication
 	Authenticator m_authenticator;
+
+	// accounts associated with this user
+	std::vector< std::unique_ptr< IAccount > > m_user_accounts;
 };
 
 #endif // USER_H

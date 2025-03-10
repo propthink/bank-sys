@@ -14,6 +14,9 @@ public:
 	// deallocate account
 	virtual ~IAccount() = default;
 
+	// get the unique id associated with this account
+	virtual bank_sys::USER_ID getAccountId() const = 0;
+
 	// deposit money into the account
 	virtual bool deposit( bank_sys::US_CENTS deposit_amount ) = 0;
 

@@ -44,6 +44,12 @@ BAccount::BAccount()
 
 	: m_account_id( BAccount::GENERATE_ACCOUNT_ID() ), m_current_balance( 0 ) { }
 
+// get the unique id associated with this account
+bank_sys::USER_ID BAccount::getAccountId() const
+{
+	return m_account_id;
+}
+
 // deposit money into the account
 bool BAccount::deposit( bank_sys::US_CENTS deposit_amount )
 {
