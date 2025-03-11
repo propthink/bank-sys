@@ -52,7 +52,7 @@ public:
 	void lockAuthenticator();
 
 	// add a new account to this user
-	void addAccount( IAccount&& new_account );
+	void addAccount( std::unique_ptr< IAccount > new_account );
 
 	// remove an existing account from this user
 	bool removeAccount( bank_sys::ACCOUNT_ID account_id );
@@ -62,6 +62,9 @@ public:
 
 	// withdraw money from an account associated with this user
 	bool withdrawFromAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS withdrawal_amount );
+
+	// TEST PRINT
+	void TEST_PRINT() const;
 
 private:
 

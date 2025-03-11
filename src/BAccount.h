@@ -31,7 +31,7 @@ public:
 	// withdraw money from the account
 	bool withdraw( bank_sys::US_CENTS withdrawal_amount ) override;
 
-	// TEST_PRINT
+	// TEST PRINT
 	void TEST_PRINT() const override;
 
 private:

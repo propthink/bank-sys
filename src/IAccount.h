@@ -23,7 +23,7 @@ public:
 	// withdraw money from the account
 	virtual bool withdraw( bank_sys::US_CENTS withdrawal_amount ) = 0;
 
-	// TEST_PRINT
+	// TEST PRINT
 	virtual void TEST_PRINT() const = 0;
 };
 

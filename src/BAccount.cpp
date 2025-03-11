@@ -89,7 +89,7 @@ bool BAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
 	return true;
 }
 
-// TEST_PRINT
+// TEST PRINT
 void BAccount::TEST_PRINT() const
 {
 	std::cout << "ACCOUNT ID: ";

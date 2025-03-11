@@ -1,6 +1,6 @@
 #include "User.h" // implementing User
 #include <random> // for random number generation
-#include <iostream> // std::cout
+#include <iostream> // TEST PRINT
 
 // generates a random, unique user ID
 bank_sys::USER_ID User::GENERATE_USER_ID()
@@ -74,19 +74,19 @@ void User::lockAuthenticator()
 }
 
 // add a new account to this user
-void User::addAccount( IAccount&& new_account )
+void User::addAccount( std::unique_ptr< IAccount > new_account )
 {
 	// iterate through the vector of accounts
 	for( const auto& current_account : m_user_accounts )
 	{
 		// check if the account already exists
-		if( current_account.get() -> getAccountId() == new_account.getAccountId() )
+		if( current_account -> getAccountId() == new_account -> getAccountId() )
 		{
 			return; // account already exists, exit without adding
 		}
 	}
 	// add the new account to this user
-	m_user_accounts.push_back( std::make_unique< IAccount >( std::move( new_account ) ) );
+	m_user_accounts.push_back( std::move( new_account ) );
 }
 
 // remove an existing account from this user
@@ -137,4 +137,21 @@ bool User::withdrawFromAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CE
 		}
 	}
 	return false; // account not found
+}
+
+// TEST PRINT
+void User::TEST_PRINT() const
+{
+	std::cout << "USER ID: " << m_user_info.m_user_id;
+
+	std::cout << " | NAME: " << m_user_info.m_full_name;
+
+	std::cout << " | PHONE: " << m_user_info.m_phone_number;
+
+	std::cout << " | EMAIL: " << m_user_info.m_email_address << '\n';
+
+	for( const auto& current_account : m_user_accounts )
+	{
+		current_account -> TEST_PRINT();
+	}
 }
