@@ -20,21 +20,18 @@ public:
 	BAccount();
 
 	// deallocate account
-	~BAccount() override = default;
+	virtual ~BAccount() = default;
 
 	// get the unique id associated with this account
 	bank_sys::USER_ID getAccountId() const override;
 
-	// deposit money into the account
-	bool deposit( bank_sys::US_CENTS deposit_amount ) override;
-
-	// withdraw money from the account
-	bool withdraw( bank_sys::US_CENTS withdrawal_amount ) override;
+	// get the current balance of this account
+	bank_sys::US_CENTS getCurrentBalance() const override;
 
 	// TEST PRINT
 	void TEST_PRINT() const override;
 
-private:
+protected:
 
 	// the unique 9-digit identifier associated with this account
 	bank_sys::ACCOUNT_ID m_account_id;

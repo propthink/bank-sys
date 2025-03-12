@@ -50,44 +50,56 @@ bank_sys::USER_ID BAccount::getAccountId() const
 	return m_account_id;
 }
 
-// deposit money into the account
-bool BAccount::deposit( bank_sys::US_CENTS deposit_amount )
+// get the current balance of this account
+bank_sys::US_CENTS BAccount::getCurrentBalance() const
 {
-	// reject invalid deposits
-	if( deposit_amount <= 0 )
-	{
-		return false;
-	}
-	// add the deposit amount to the current balance
-	m_current_balance += deposit_amount;
-
-	// log the transaction
-	m_transaction_registry.insertTransaction( Transaction( m_account_id, deposit_amount ) );
-
-	return true;
+	return m_current_balance;
 }
+
+// deposit money into the account
+// bool deposit( bank_sys::US_CENTS deposit_amount ) override;
 
 // withdraw money from the account
-bool BAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
-{
-	// reject invalid withdrawals
-	if( withdrawal_amount <= 0 )
-	{
-		return false;
-	}
-	// insufficient funds
-	//if( withdrawal_amount > m_current_balance )
-	//{
-		//return false;
-	//}
-	// subtract the withdrawal amount from the current balance
-	m_current_balance -= withdrawal_amount;
+// bool withdraw( bank_sys::US_CENTS withdrawal_amount ) override;
 
-	// log the transaction
-	m_transaction_registry.insertTransaction( Transaction( m_account_id, -withdrawal_amount ) );
+// deposit money into the account
+//bool BAccount::deposit( bank_sys::US_CENTS deposit_amount )
+//{
+//	// reject invalid deposits
+//	if( deposit_amount <= 0 )
+//	{
+//		return false;
+//	}
+//	// add the deposit amount to the current balance
+//	m_current_balance += deposit_amount;
+//
+//	// log the transaction
+//	m_transaction_registry.insertTransaction( Transaction( m_account_id, deposit_amount ) );
+//
+//	return true;
+//}
 
-	return true;
-}
+// withdraw money from the account
+//bool BAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
+//{
+//	// reject invalid withdrawals
+//	if( withdrawal_amount <= 0 )
+//	{
+//		return false;
+//	}
+//	// insufficient funds
+//	//if( withdrawal_amount > m_current_balance )
+//	//{
+//		//return false;
+//	//}
+//	// subtract the withdrawal amount from the current balance
+//	m_current_balance -= withdrawal_amount;
+//
+//	// log the transaction
+//	m_transaction_registry.insertTransaction( Transaction( m_account_id, -withdrawal_amount ) );
+//
+//	return true;
+//}
 
 // TEST PRINT
 void BAccount::TEST_PRINT() const

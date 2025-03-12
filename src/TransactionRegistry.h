@@ -2,6 +2,7 @@
 #define TRANSACTION_REGISTRY_H
 
 #include "Transaction.h" // Transaction
+#include "Common.h" // bank_sys namespace
 #include <memory> // std::unique_ptr
 
 // manages all transactions in a linked list
