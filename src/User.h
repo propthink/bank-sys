@@ -1,24 +1,18 @@
 #ifndef USER_H
 #define USER_H
 
-#include "Common.h" // bank_sys namespace
+#include "Common.h" // bank_sys
+#include "IAccount.h" // IAccount
 #include "Authenticator.h" // Authenticator
-#include "IAccount.h" // account interface
-#include <unordered_set> // std::unordered_set
 #include <string> // std::string
-#include <vector> // std::vector
 #include <memory> // std::unique_ptr
+#include <unordered_set> // std::unordered_set
+#include <vector> // std::vector
 
 // represents a single user with personal information and account details
 class User
 {
 public:
-
-	// generates a random, unique user ID
-	static bank_sys::USER_ID GENERATE_USER_ID();
-
-	// tracks existing user IDs to enforce uniqueness
-	static std::unordered_set< bank_sys::USER_ID > GENERATED_USER_IDS;
 
 	// stores user information including user id, name, phone number, and email address
 	struct UserInfo
@@ -37,7 +31,7 @@ public:
 		std::string m_email_address; // user email address
 	};
 	// initialize user
-	User( const User::UserInfo& user_info, const std::string& user_password );
+	User( User::UserInfo&& user_info, const std::string& user_password );
 
 	// get the unique id associated with this user
 	bank_sys::USER_ID getUserId() const;
@@ -52,21 +46,21 @@ public:
 	void lockAuthenticator();
 
 	// add a new account to this user
-	void addAccount( std::unique_ptr< IAccount > new_account );
+	void addAccount( std::unique_ptr<IAccount> new_account );
 
 	// remove an existing account from this user
 	bool removeAccount( bank_sys::ACCOUNT_ID account_id );
 
-	// deposit money into an account associated with this user
-	bool depositToAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS deposit_amount );
-
-	// withdraw money from an account associated with this user
-	bool withdrawFromAccount( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS withdrawal_amount );
-
-	// TEST PRINT
-	void TEST_PRINT() const;
+	// print the user details to the console
+	void printUserInfo() const;
 
 private:
+
+	// generates a random, unique user ID
+	static bank_sys::USER_ID GENERATE_USER_ID();
+
+	// tracks existing user IDs to enforce uniqueness
+	static std::unordered_set< bank_sys::USER_ID > GENERATED_USER_IDS;
 
 	// basic user information
 	UserInfo m_user_info;

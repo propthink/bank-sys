@@ -1,10 +1,66 @@
-#include "BAccount.h" // implementing BAccount
-#include <random> // random number generation
-
-#include <iostream> // TEST PRINT
-#include <iomanip> // std::put_money
-#include <locale> // std::locale, std::imbue
+#include "BAccount.h" // implementing BAccount.h
+#include <iostream> // std:cout
+#include <iomanip> // std::setw, std::setfill, std::put_money
+#include <locale> // std::locale
 #include <cmath> // std::abs
+#include <random> // rng
+
+// initialize account
+BAccount::BAccount()
+
+	: m_account_id( GENERATE_ACCOUNT_ID() ), m_current_balance( 0 ) { }
+
+// get the unique id associated with the account
+bank_sys::ACCOUNT_ID BAccount::getAccountId() const
+{
+	return m_account_id;
+}
+
+// get the current balance of the account
+bank_sys::US_CENTS BAccount::getAccountBalance() const
+{
+	return m_current_balance;
+}
+
+// get the overdraft fee associated with the account (if applicable)
+bank_sys::US_CENTS BAccount::getOverdraftProtectionFee() const
+{
+	return 0;
+}
+
+// get the account maintenance fee associated with the account (if applicable)
+bank_sys::US_CENTS BAccount::getAccountMaintenanceFee() const
+{
+	return 0;
+}
+
+// log a transaction with the account
+void BAccount::logAccountTransaction( Transaction&& account_transaction )
+{
+	m_transaction_history.insertTransaction( std::move( account_transaction ) );
+}
+
+// print the account details to the console
+void BAccount::printAccountInfo() const
+{
+	std::cout << "ACCOUNT ID: " << m_account_id;
+
+	std::cout << " | ACCOUNT TYPE: " << getAccountString();
+
+	std::locale original_locale = std::cout.getloc(); // save current format
+
+	std::cout.imbue( std::locale( "en_US.UTF-8" ) ); // format output
+
+	std::cout << " | CURRENT BALANCE: " << ( m_current_balance < 0 ? "$(" : "$" )
+
+		<< std::put_money( std::abs( m_current_balance ) )
+
+		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
+
+	std::cout.imbue( original_locale ); // restore the original format
+
+	m_transaction_history.printTransactionRegistry();
+}
 
 // generates a random, unique account ID
 bank_sys::ACCOUNT_ID BAccount::GENERATE_ACCOUNT_ID()
@@ -27,7 +83,9 @@ bank_sys::ACCOUNT_ID BAccount::GENERATE_ACCOUNT_ID()
 		new_account_id = rng_distribution( random_generator );
 
 		// check if the account ID already exists
-	} while( GENERATED_ACCOUNT_IDS.find( new_account_id ) != GENERATED_ACCOUNT_IDS.end() );
+	} while( GENERATED_ACCOUNT_IDS.find( new_account_id ) != GENERATED_ACCOUNT_IDS.end()
+
+		|| new_account_id == bank_sys::VAULT_ID ); // avoid the unique vault id
 
 	// insert the new unique account ID into the set
 	GENERATED_ACCOUNT_IDS.insert( new_account_id );
@@ -38,89 +96,3 @@ bank_sys::ACCOUNT_ID BAccount::GENERATE_ACCOUNT_ID()
 
 // tracks existing account IDs to enforce uniqueness
 std::unordered_set< bank_sys::ACCOUNT_ID > BAccount::GENERATED_ACCOUNT_IDS;
-
-// initialize account
-BAccount::BAccount()
-
-	: m_account_id( BAccount::GENERATE_ACCOUNT_ID() ), m_current_balance( 0 ) { }
-
-// get the unique id associated with this account
-bank_sys::USER_ID BAccount::getAccountId() const
-{
-	return m_account_id;
-}
-
-// get the current balance of this account
-bank_sys::US_CENTS BAccount::getCurrentBalance() const
-{
-	return m_current_balance;
-}
-
-// deposit money into the account
-// bool deposit( bank_sys::US_CENTS deposit_amount ) override;
-
-// withdraw money from the account
-// bool withdraw( bank_sys::US_CENTS withdrawal_amount ) override;
-
-// deposit money into the account
-//bool BAccount::deposit( bank_sys::US_CENTS deposit_amount )
-//{
-//	// reject invalid deposits
-//	if( deposit_amount <= 0 )
-//	{
-//		return false;
-//	}
-//	// add the deposit amount to the current balance
-//	m_current_balance += deposit_amount;
-//
-//	// log the transaction
-//	m_transaction_registry.insertTransaction( Transaction( m_account_id, deposit_amount ) );
-//
-//	return true;
-//}
-
-// withdraw money from the account
-//bool BAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
-//{
-//	// reject invalid withdrawals
-//	if( withdrawal_amount <= 0 )
-//	{
-//		return false;
-//	}
-//	// insufficient funds
-//	//if( withdrawal_amount > m_current_balance )
-//	//{
-//		//return false;
-//	//}
-//	// subtract the withdrawal amount from the current balance
-//	m_current_balance -= withdrawal_amount;
-//
-//	// log the transaction
-//	m_transaction_registry.insertTransaction( Transaction( m_account_id, -withdrawal_amount ) );
-//
-//	return true;
-//}
-
-// TEST PRINT
-void BAccount::TEST_PRINT() const
-{
-	std::cout << "ACCOUNT ID: ";
-
-	std::cout << m_account_id;
-
-	std::cout << " | CURRENT BALANCE: ";
-
-	std::locale original_locale = std::cout.getloc(); // save current format
-
-	std::cout.imbue( std::locale( "en_US.UTF-8" ) ); // format output
-
-	std::cout << ( m_current_balance < 0 ? "$(" : "$" )
-
-		<< std::put_money( std::abs( m_current_balance ) )
-
-		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
-
-	std::cout.imbue( original_locale ); // restore the original format
-
-	m_transaction_registry.TEST_PRINT();
-}

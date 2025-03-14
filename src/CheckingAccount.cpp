@@ -1,6 +1,20 @@
 #include "CheckingAccount.h" // implementing CheckingAccount.h
 
-// deposit money into account
+// get the overdraft fee associated with the account (if applicable)
+bank_sys::US_CENTS CheckingAccount::getOverdraftProtectionFee() const
+{
+	return m_overdraft_protection.getOverdraftFee();
+}
+
+// get the account maintenance fee associated with the account (if applicable)
+bank_sys::US_CENTS CheckingAccount::getAccountMaintenanceFee() const
+{
+	return ( m_session_transaction_counter < sm_MIN_TRANSACTIONS_TO_WAIVE_FEE )
+
+		? sm_ACCOUNT_MAINTENANCE_FEE : 0;
+}
+
+// deposit money into the account
 bool CheckingAccount::deposit( bank_sys::US_CENTS deposit_amount )
 {
 	// check if the deposit amount is valid
@@ -9,22 +23,17 @@ bool CheckingAccount::deposit( bank_sys::US_CENTS deposit_amount )
 		// reject invalid deposit
 		return false;
 	}
-	// update balance
+	// update the account balance
 	m_current_balance += deposit_amount;
 
-	// log transaction
-	m_transaction_registry.insertTransaction(
-
-		Transaction( BAccount::m_account_id, deposit_amount ) );
-
-	// update session transaction counter
+	// increment transaction counter
 	m_session_transaction_counter += 1;
 
-	// transaction successful
+	// deposit valid
 	return true;
 }
 
-// withdraw money from account
+// withdraw money from the account
 bool CheckingAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
 {
 	// check if the withdrawal amount is valid
@@ -33,59 +42,51 @@ bool CheckingAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
 		// reject invalid withdrawal
 		return false;
 	}
-	// check if the account has sufficient funds
-	if( BAccount::m_current_balance - withdrawal_amount < 0 )
+	// check if the balance is sufficient
+	if( m_current_balance < withdrawal_amount )
 	{
-		// check if overdraft protection is applied
-		if( !m_overdraft_protection.applyOverdraftProtection( BAccount::m_current_balance, withdrawal_amount ) )
+		// check if overdraft protection is available
+		if( m_overdraft_protection.isActive()
+
+			&& m_overdraft_protection.applyOverdraftProtection( m_current_balance, withdrawal_amount ) )
 		{
-			// unable to apply overdraft protection
+			// overdraft protection activated
+			m_current_balance -= m_overdraft_protection.getOverdraftFee();
+		}
+		else
+		{
+			// insufficient balance
 			return false;
 		}
-		// overdraft protection approved, apply fee and log transaction
-		m_current_balance -= m_overdraft_protection.getOverdraftFee();
-
-		m_transaction_registry.insertTransaction(
-
-			Transaction( BAccount::m_account_id, -m_overdraft_protection.getOverdraftFee() ) );
 	}
-	// update balance
+	// update the account balance
 	m_current_balance -= withdrawal_amount;
 
-	// log transaction
-	m_transaction_registry.insertTransaction(
-
-		Transaction( BAccount::m_account_id, -withdrawal_amount ) );
-
-	// update session transaction counter
+	// increment transaction counter
 	m_session_transaction_counter += 1;
 
-	// transaction successful
+	// withdrawal is valid
 	return true;
 }
 
-// apply maintenance fee if applicable
-bool CheckingAccount::applyMaintenanceFee()
-{
-	// check if the minimum number of transactions has been met to waive the fee
-	if( m_session_transaction_counter >= sm_MIN_TRANSACTIONS_TO_WAIVE_FEE )
-	{
-		// fee waived
-		return false;
-	}
-	// apply the maintenance fee to the account
-	if( !withdraw( sm_ACCOUNT_MAINTENANCE_FEE ) )
-	{
-		// transaction rejected
-		return false;
-	}
-	// transaction successful
-	return true;
-}
+// initialize overdraft protection logic
+CheckingAccount::OverdraftProtection::OverdraftProtection(
+
+	bank_sys::US_CENTS overdraft_limit,
+
+	bank_sys::US_CENTS overdraft_fee,
+
+	bool overdraft_protection_active )
+
+	: m_overdraft_limit( overdraft_limit ), m_overdraft_fee( overdraft_fee ),
+
+	m_overdraft_protection_active( overdraft_protection_active ) { }
 
 // apply overdraft protection if the withdrawal exceeds the current balance,
 // but only if the transaction stays within the specified overdraft limit
-bool CheckingAccount::OverdraftProtection::applyOverdraftProtection( bank_sys::US_CENTS account_balance,
+bool CheckingAccount::OverdraftProtection::applyOverdraftProtection(
+
+	bank_sys::US_CENTS account_balance,
 
 	bank_sys::US_CENTS withdrawal_amount )
 {
@@ -98,8 +99,20 @@ bool CheckingAccount::OverdraftProtection::applyOverdraftProtection( bank_sys::U
 	return false; // overdraft protection denied
 }
 
+// check if overdraft protection is active
+bool CheckingAccount::OverdraftProtection::isActive() const
+{
+	return m_overdraft_protection_active;
+}
+
 // get the overdraft fee
 bank_sys::US_CENTS CheckingAccount::OverdraftProtection::getOverdraftFee() const
 {
 	return m_overdraft_fee;
+}
+
+// get the text string associated with the account type (for logging purposes)
+std::string CheckingAccount::getAccountString() const
+{
+	return "Checking";
 }

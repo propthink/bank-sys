@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <cstdint> // int64_t, uint32_t
+#include <cstdint> // int64_t and uint32_t
 
 // common types and definitions used across the banking system
 namespace bank_sys
@@ -14,5 +14,10 @@ namespace bank_sys
 
 	// a unique 9-digit identifier associated with a specific account
 	typedef uint32_t ACCOUNT_ID;
+
+	// TODO: refactor vault id logic?
+	// the unique 9-digit account id associated with the vault
+	constexpr bank_sys::ACCOUNT_ID VAULT_ID = 100000000;
 }
+
 #endif // COMMON_H

@@ -1,7 +1,7 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include "Common.h" // bank_sys namespace
+#include "Common.h" // bank_sys
 #include <string> // std::string
 
 // holds the details of a single financial transaction
@@ -9,25 +9,37 @@ class Transaction
 {
 public:
 
-	// initialize the transaction
+	// initialize a transaction with two accounts
+	Transaction(
+
+		bank_sys::ACCOUNT_ID from_account,
+
+		bank_sys::ACCOUNT_ID to_account,
+
+		bank_sys::US_CENTS transaction_amount );
+
+	// initialize a transaction with a single account
 	Transaction( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS transaction_amount );
 
-	// TEST PRINT
-	void TEST_PRINT() const;
+	// print the transaction details to the console
+	void printTransactionInfo() const;
 
 private:
 
-	// account id
-	bank_sys::ACCOUNT_ID m_account_id;
+	// from_account id
+	bank_sys::ACCOUNT_ID m_from_account;
 
-	// amount of transaction
-	bank_sys::US_CENTS m_amount;
+	// to_account id
+	bank_sys::ACCOUNT_ID m_to_account;
 
-	// brief text description
-	std::string m_description;
+	// transaction amount
+	bank_sys::US_CENTS m_transaction_amount;
 
 	// timestamp
 	std::string m_timestamp;
+
+	// description
+	std::string m_description;
 };
 
 #endif // TRANSACTION_H

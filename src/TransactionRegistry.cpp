@@ -1,4 +1,4 @@
-#include "TransactionRegistry.h" // implementing TransactionRegistry
+#include "TransactionRegistry.h" // implementing TransactionRegistry.h
 
 // initialize transaction registry
 TransactionRegistry::TransactionRegistry()
@@ -34,8 +34,8 @@ void TransactionRegistry::insertTransaction( Transaction&& transaction )
 	}
 }
 
-// TEST PRINT
-void TransactionRegistry::TEST_PRINT() const
+// print the entire transaction registry to the console
+void TransactionRegistry::printTransactionRegistry() const
 {
 	auto current_node = m_head.get();
 
@@ -43,7 +43,7 @@ void TransactionRegistry::TEST_PRINT() const
 	{
 		if( current_node -> m_user )
 		{
-			current_node -> m_user -> TEST_PRINT();
+			current_node -> m_user -> printTransactionInfo();
 		}
 		current_node = current_node -> m_next.get();
 	}

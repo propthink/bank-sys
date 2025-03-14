@@ -1,9 +1,8 @@
 #ifndef USER_REGISTRY_H
 #define USER_REGISTRY_H
 
+#include "Common.h" // bank_sys
 #include "User.h" // User
-#include "Common.h" // bank_sys namespace
-#include <memory> // std::unique_ptr
 
 // manages all users in a linked list
 class UserRegistry

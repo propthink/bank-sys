@@ -1,4 +1,4 @@
-#include "UserRegistry.h" // implementing UserRegistry
+#include "UserRegistry.h" // implementing UserRegistry.h
 
 // initialize user registry
 UserRegistry::UserRegistry()
@@ -126,6 +126,6 @@ User* UserRegistry::findUser( bank_sys::USER_ID user_id )
 // initialize user node
 UserRegistry::UserNode::UserNode( User&& user )
 
-	: m_user( std::make_unique< User >( std::move( user ) ) ), 
-	
+	: m_user( std::make_unique< User >( std::move( user ) ) ),
+
 	m_next( nullptr ), m_prev( nullptr ) { }

@@ -1,18 +1,22 @@
-#include "Authenticator.h" // implementing Authenticator
-#include <iomanip> // std::hex, std::setw, std::setfill
+#include "Authenticator.h" // implementing Authenticator.h
 #include <sstream> // std::ostringstream
+#include <iomanip> // std::setw, set::setfill
+#include <limits> // std::numeric_limits
+#include <random> // rng
+#include <ctime> // std::time
 
-// Define which hashing method to use (uncomment one of the following)
+// Define which hashing method to use (uncomment one of the following):
+
 // simple implementation, uses the standard library, but is not cryptographically secure:
 #define USE_STD_HASH
+
 // complex implementation, requires additional dependencies, but is cryptographically secure:
 // #define USE_SHA256_HASH
 
 #ifdef USE_STD_HASH
 // for std::hash (C++ standard library implementation)
 // not cryptographically secure
-#include <functional>
-#include <random> // for random number generation
+#include <functional> // for std::hash?
 
 // function to hash a password using std::hash
 std::string generateHash( const std::string& user_password )
@@ -156,7 +160,7 @@ std::string generateSalt()
 Authenticator::Authenticator( const std::string& password_text )
 
 	: m_password_salt( generateSalt() ),
-	
+
 	m_password_hash( generateHash( password_text + m_password_salt ) ) { }
 
 // returns true if the authenticator is locked

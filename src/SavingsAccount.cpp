@@ -1,6 +1,6 @@
 #include "SavingsAccount.h" // implementing SavingsAccount.h
 
-// deposit money into account
+// deposit money into the account
 bool SavingsAccount::deposit( bank_sys::US_CENTS deposit_amount )
 {
 	// check if the deposit amount is valid
@@ -9,15 +9,10 @@ bool SavingsAccount::deposit( bank_sys::US_CENTS deposit_amount )
 		// reject invalid deposit
 		return false;
 	}
-	// update balance
+	// update the account balance
 	m_current_balance += deposit_amount;
 
-	// log transaction
-	m_transaction_registry.insertTransaction(
-
-		Transaction( BAccount::m_account_id, deposit_amount ) );
-
-	// transaction successful
+	// deposit valid
 	return true;
 }
 
@@ -30,75 +25,30 @@ bool SavingsAccount::withdraw( bank_sys::US_CENTS withdrawal_amount )
 		// reject invalid withdrawal
 		return false;
 	}
-	// check if the account has sufficient funds
-	if( BAccount::m_current_balance < withdrawal_amount )
+	// check if the balance is sufficient (including minimum balance requirement)
+	if( m_current_balance - withdrawal_amount < m_minimum_balance )
 	{
 		// reject invalid withdrawal
 		return false;
 	}
-	// check if the withdrawal would bring the balance below the minimum
-	if( BAccount::m_current_balance - withdrawal_amount < m_minimum_balance )
-	{
-		// reject invalid withdrawal
-		return false;
-	}
-	// check if the withdrawal limit has been exceeded
+	// check if the account has exceeded the withdrawal limit
 	if( m_session_withdrawal_counter >= sm_MAX_WITHDRAWALS_PER_SESSION )
 	{
 		// reject invalid withdrawal
 		return false;
 	}
-	// update balance
+	// update the account balance
 	m_current_balance -= withdrawal_amount;
 
-	// log transaction
-	m_transaction_registry.insertTransaction(
-
-		Transaction( BAccount::m_account_id, -withdrawal_amount ) );
-
-	// update session withdrawal counter
+	// increment withdrawal counter
 	m_session_withdrawal_counter += 1;
 
-	// transaction successful
+	// withdrawal valid
 	return true;
 }
 
-// apply interest to savings account balance
-bool SavingsAccount::applyInterest()
+// get the text string associated with the account type (for logging purposes)
+std::string SavingsAccount::getAccountString() const
 {
-	// check that the balance meets the minimum requirement and is not negative
-	if( BAccount::m_current_balance < m_minimum_balance || m_current_balance < 0 )
-	{
-		// reject the transaction if minimum requirements are not met
-		return false;
-	}
-	// calculate the interest amount
-	bank_sys::US_CENTS interest_amount = m_interest_calculator.calculateInterest(
-
-		BAccount::m_current_balance );
-
-	// deposit only the interest amount
-	if( !deposit( interest_amount ) )
-	{
-		// deposit was rejected
-		return false;
-	}
-	// transaction successful
-	return true;
-}
-
-// calculate and return interest
-bank_sys::US_CENTS SavingsAccount::InterestCalculator::calculateInterest( bank_sys::US_CENTS user_balance ) const
-{
-	// use floating-point arithmetic to calculate interest amount
-	double interest_amount = user_balance * m_interest_rate;
-
-	// add 0.5 before casting to ensure rounding to the nearest integer
-	return static_cast<bank_sys::US_CENTS>( interest_amount + 0.5 );
-}
-
-// calculate the total balance (principal and interest)
-bank_sys::US_CENTS SavingsAccount::InterestCalculator::calculateBalance( bank_sys::US_CENTS user_balance ) const
-{
-	return user_balance + calculateInterest( user_balance );
+	return "Savings";
 }
