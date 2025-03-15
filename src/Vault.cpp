@@ -1,4 +1,9 @@
 #include "Vault.h" // implementing Vault.h
+#include <iostream> // std::cout
+#include <string> // std::string
+#include <locale> // std::locale
+#include <iomanip> // std::put_money
+#include <cstdlib> // std::abs
 
 // initialize the vault with an initial balance
 Vault::Vault( bank_sys::US_CENTS initial_balance )
@@ -53,4 +58,24 @@ bool Vault::withdraw( bank_sys::US_CENTS withdrawal_amount )
 void Vault::logVaultTransaction( Transaction&& vault_transaction )
 {
 	m_transaction_history.insertTransaction( std::move( vault_transaction ) );
+}
+
+// print the vault details to the console
+void Vault::printVaultInfo() const
+{
+	std::cout << "VAULT ID: " << getVaultId();
+
+	std::locale original_locale = std::cout.getloc(); // save current format
+
+	std::cout.imbue( std::locale( "en_US.UTF-8" ) ); // format output
+
+	std::cout << " | CURRENT BALANCE: " << ( m_current_balance < 0 ? "$(" : "$" )
+
+		<< std::put_money( std::abs( m_current_balance ) )
+
+		<< ( m_current_balance < 0 ? ")" : "" ) << '\n';
+
+	std::cout.imbue( original_locale ); // restore the original format
+
+	m_transaction_history.printTransactionRegistry();
 }

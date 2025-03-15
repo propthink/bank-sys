@@ -28,6 +28,9 @@ public:
 	// log a transaction with the vault
 	void logVaultTransaction( Transaction&& vault_transaction );
 
+	// print the vault details to the console
+	void printVaultInfo() const;
+
 private:
 
 	// the current balance in the vault
