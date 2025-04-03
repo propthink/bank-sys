@@ -35,12 +35,12 @@ void UserRegistry::insertUser( User&& user )
 }
 
 // delete an existing user from the registry
-void UserRegistry::deleteUser( bank_sys::USER_ID user_id )
+bool UserRegistry::deleteUser( bank_sys::USER_ID user_id )
 {
 	// check if the list is empty
 	if( m_head == nullptr )
 	{
-		return; // nothing to delete
+		return false; // nothing to delete
 	}
 	// start from the head
 	auto current_node = m_head.get();
@@ -86,13 +86,14 @@ void UserRegistry::deleteUser( bank_sys::USER_ID user_id )
 				// move the next node into the previous node's next pointer
 				current_node -> m_prev -> m_next = std::move( current_node -> m_next );
 			}
-			// return after deletion
-			return;
+			// return after successful deletion
+			return true;
 		}
 		// move to the next node
 		current_node = current_node -> m_next.get();
 	}
 	// user id not found
+	return false;
 }
 
 // search for a user in the registry
@@ -121,6 +122,50 @@ User* UserRegistry::findUser( bank_sys::USER_ID user_id )
 	}
 	// user id not found
 	return nullptr;
+}
+
+// update an existing user in the registry
+bool UserRegistry::updateUser( bank_sys::USER_ID user_id, const User::UserInfo& user_info )
+{
+	// check if the list is empty
+	if( m_head == nullptr )
+	{
+		return false; // nothing here to update
+	}
+	// start from the head node
+	auto current_node = m_head.get();
+
+	// iterate through each node in the list
+	while( current_node != nullptr )
+	{
+		// check if the user id matches
+		if( current_node -> m_user -> getUserId() == user_id )
+		{
+			// update the user inside of the node
+			current_node -> m_user -> updateUserInfo( user_info );
+
+			return true; // update successful
+		}
+		// move to the next node
+		current_node = current_node -> m_next.get();
+	}
+	// user id not found
+	return false;
+}
+
+// print the entire user registry to the console
+void UserRegistry::printUserRegistry() const
+{
+	auto current_node = m_head.get();
+
+	while( current_node )
+	{
+		if( current_node -> m_user )
+		{
+			current_node -> m_user -> printUserInfo();
+		}
+		current_node = current_node -> m_next.get();
+	}
 }
 
 // initialize user node

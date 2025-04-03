@@ -16,10 +16,16 @@ public:
 	void insertUser( User&& user );
 
 	// delete an existing user from the registry
-	void deleteUser( bank_sys::USER_ID user_id );
+	bool deleteUser( bank_sys::USER_ID user_id );
 
 	// search for a user in the registry
 	User* findUser( bank_sys::USER_ID user_id );
+
+	// update an existing user in the registry
+	bool updateUser( bank_sys::USER_ID user_id, const User::UserInfo& user_info );
+
+	// print the entire user registry to the console
+	void printUserRegistry() const;
 
 private:
 

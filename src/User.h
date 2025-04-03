@@ -17,10 +17,15 @@ public:
 	// stores user information including user id, name, phone number, and email address
 	struct UserInfo
 	{
-		// initialize user information
+		// initialize new user info
 		UserInfo( const std::string& full_name, const std::string& phone_number,
 
 			const std::string& email_address );
+
+		// initialize pre-existing user info
+		UserInfo( bank_sys::USER_ID user_id, const std::string& full_name, 
+			
+			const std::string& phone_number, const std::string& email_address );
 
 		bank_sys::USER_ID m_user_id; // unique user id
 
@@ -44,6 +49,9 @@ public:
 
 	// manually locks the authenticator
 	void lockAuthenticator();
+
+	// update the user info associated with this user
+	void updateUserInfo( const UserInfo& user_info );
 
 	// add a new account to this user
 	void addAccount( std::unique_ptr<IAccount> new_account );

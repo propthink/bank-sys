@@ -1,35 +1,59 @@
-#include "Vault.h"
-#include "IAccount.h"
-#include "CheckingAccount.h"
-#include "SavingsAccount.h"
-#include "TransactionUtilities.h"
+#include "Common.h"
+#include "User.h"
+#include "UserRegistry.h"
 
-#include <memory> // std::unique_ptr
+#include <iostream>
 
-//
+// enter main
 int main()
 {
-	Vault bank_vault;
+	// init user registry
+	UserRegistry user_registry;
 
-	std::unique_ptr< IAccount > checking_account = std::make_unique< CheckingAccount >();
+	// init new user
+	User new_user( User::UserInfo( "Joe", "555-5555", "joe@email" ), "password" );
 
-	std::unique_ptr< IAccount > savings_account = std::make_unique< SavingsAccount >();
+	bank_sys::USER_ID user_id = new_user.getUserId();
 
-	TransactionUtilities::depositToAccount( *checking_account, bank_vault, 50000 );
+	// add user to registry
+	user_registry.insertUser( std::move( new_user ) );
 
-	TransactionUtilities::depositToAccount( *savings_account, bank_vault, 50000 );
+	user_registry.printUserRegistry();
 
-	if( checking_account -> calculateInterest() != 0 )
+	// find uswr in registry
+	User* find_user = nullptr;
+
+	find_user = user_registry.findUser( user_id );
+
+	if( find_user == nullptr )
 	{
-		TransactionUtilities::transferFromVaultToAccount( *checking_account, bank_vault, checking_account -> calculateInterest() );
+		std::cout << "find_user is null \n";
 	}
-	if( savings_account -> calculateInterest() != 0 )
+	else
 	{
-		TransactionUtilities::transferFromVaultToAccount( *savings_account, bank_vault, savings_account -> calculateInterest() );
+		find_user -> printUserInfo();
 	}
-	checking_account -> printAccountInfo();
 
-	savings_account -> printAccountInfo();
+	// update user
+	User::UserInfo new_info( user_id, "Joe", "777-7777", "new@email" );
 
-	bank_vault.printVaultInfo();
+	if( !user_registry.updateUser( user_id, new_info ) )
+	{
+		std::cout << "could not update user info \n";
+	}
+	else
+	{
+		user_registry.printUserRegistry();
+	}
+	// delete user
+	if( !user_registry.deleteUser( user_id ) )
+	{
+		std::cout << "could not delete user \n";
+	}
+	else
+	{
+		user_registry.printUserRegistry();
+	}
+	// return to OS
+	return 0;
 }

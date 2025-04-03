@@ -2,12 +2,21 @@
 #include <iostream> // std::cout
 #include <random> // rng
 
-// initialize user information
+// initialize new user info
 User::UserInfo::UserInfo( const std::string& full_name, const std::string& phone_number,
 
 	const std::string& email_address )
 
 	: m_user_id( User::GENERATE_USER_ID() ), m_full_name( full_name ),
+
+	m_phone_number( phone_number ), m_email_address( email_address ) { }
+
+// initialize pre-existing user info
+User::UserInfo::UserInfo( bank_sys::USER_ID user_id, const std::string& full_name,
+
+	const std::string& phone_number, const std::string& email_address )
+
+	: m_user_id( user_id ), m_full_name( full_name ),
 
 	m_phone_number( phone_number ), m_email_address( email_address ) { }
 
@@ -38,6 +47,12 @@ bool User::unlockAuthenticator( const std::string& password_attempt )
 void User::lockAuthenticator()
 {
 	m_authenticator.lock();
+}
+
+// update the user info associated with this user
+void User::updateUserInfo( const UserInfo& user_info )
+{
+	m_user_info = user_info;
 }
 
 // add a new account to this user
