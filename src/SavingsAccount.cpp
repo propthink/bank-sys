@@ -1,6 +1,12 @@
 #include "SavingsAccount.h" // implementing SavingsAccount.h
 #include <cmath> // std::lround
 
+// calculate the interest amount associated with the account
+bank_sys::US_CENTS SavingsAccount::calculateInterest() const
+{
+	return m_interest_calculator.calculateInterest( m_current_balance );
+}
+
 // deposit money into the account
 bool SavingsAccount::deposit( bank_sys::US_CENTS deposit_amount )
 {

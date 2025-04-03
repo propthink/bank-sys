@@ -34,6 +34,12 @@ bank_sys::US_CENTS BAccount::getAccountMaintenanceFee() const
 	return 0;
 }
 
+// calculate the interest amount associated with the account (if applicable)
+bank_sys::US_CENTS BAccount::calculateInterest() const
+{
+	return 0;
+}
+
 // log a transaction with the account
 void BAccount::logAccountTransaction( Transaction&& account_transaction )
 {

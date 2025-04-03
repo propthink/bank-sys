@@ -18,10 +18,10 @@ public:
 	// deallocate checking account
 	~CheckingAccount() override = default;
 
-	// get the overdraft fee associated with the account (if applicable)
+	// get the overdraft fee associated with the account
 	bank_sys::US_CENTS getOverdraftProtectionFee() const override;
 
-	// get the account maintenance fee associated with the account (if applicable)
+	// get the account maintenance fee associated with the account
 	bank_sys::US_CENTS getAccountMaintenanceFee() const override;
 
 	// deposit money into the account

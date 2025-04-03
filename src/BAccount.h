@@ -29,6 +29,9 @@ public:
 	// get the account maintenance fee associated with the account (if applicable)
 	bank_sys::US_CENTS getAccountMaintenanceFee() const override;
 
+	// calculate the interest amount associated with the account (if applicable)
+	bank_sys::US_CENTS calculateInterest() const override;
+
 	// log a transaction with the account
 	void logAccountTransaction( Transaction&& account_transaction ) override;
 

@@ -19,6 +19,9 @@ public:
 	// deallocate savings account
 	~SavingsAccount() override = default;
 
+	// calculate the interest amount associated with the account
+	bank_sys::US_CENTS calculateInterest() const override;
+
 	// deposit money into the account
 	bool deposit( bank_sys::US_CENTS deposit_amount ) override;
 
@@ -52,6 +55,9 @@ private:
 		// the interest rate
 		double m_interest_rate;
 	};
+	// manages interest calculation logic for the savings account
+	InterestCalculator m_interest_calculator;
+
 	// minimum balance requirement, default minimum = $250
 	bank_sys::US_CENTS m_minimum_balance = 25000;
 

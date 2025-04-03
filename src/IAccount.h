@@ -28,6 +28,9 @@ public:
 	// get the account maintenance fee associated with the account (if applicable)
 	virtual bank_sys::US_CENTS getAccountMaintenanceFee() const = 0;
 
+	// calculate the interest amount associated with the account (if applicable)
+	virtual bank_sys::US_CENTS calculateInterest() const = 0;
+
 	// deposit money into the account
 	virtual bool deposit( bank_sys::US_CENTS deposit_amount ) = 0;
 
