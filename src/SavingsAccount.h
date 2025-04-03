@@ -30,6 +30,28 @@ public:
 
 private:
 
+	// manages interest calculation logic for the savings account
+	class InterestCalculator
+	{
+	public:
+
+		// initialize the interest calculator with a specific interest rate
+		InterestCalculator( double interest_rate = 0.025 );
+
+		// get the interest rate
+		double getInterestRate() const;
+
+		// given the principal amount, get just the interest amount
+		bank_sys::US_CENTS calculateInterest( bank_sys::US_CENTS principal_amount ) const;
+
+		// given the principal amount, get the principal amount combined with the interest amount
+		bank_sys::US_CENTS calculateTotal( bank_sys::US_CENTS principal_amount ) const;
+
+	private:
+
+		// the interest rate
+		double m_interest_rate;
+	};
 	// minimum balance requirement, default minimum = $250
 	bank_sys::US_CENTS m_minimum_balance = 25000;
 
