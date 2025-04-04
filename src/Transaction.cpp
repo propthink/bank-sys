@@ -81,6 +81,18 @@ Transaction::Transaction( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS tr
 	m_timestamp = generateTimestamp();
 }
 
+// get the from_account id
+bank_sys::ACCOUNT_ID Transaction::getFromAccountId() const
+{
+	return m_from_account;
+}
+
+// get the to_account id
+bank_sys::ACCOUNT_ID Transaction::getToAccountId() const
+{
+	return m_to_account;
+}
+
 // print the transaction details to the console
 void Transaction::printTransactionInfo() const
 {

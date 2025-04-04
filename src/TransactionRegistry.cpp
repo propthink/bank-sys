@@ -41,9 +41,29 @@ void TransactionRegistry::printTransactionRegistry() const
 
 	while( current_node )
 	{
-		if( current_node -> m_user )
+		if( current_node -> m_transaction )
 		{
-			current_node -> m_user -> printTransactionInfo();
+			current_node -> m_transaction -> printTransactionInfo();
+		}
+		current_node = current_node -> m_next.get();
+	}
+}
+
+// filter the transaction registry by account number
+void TransactionRegistry::printFilteredTransactions( bank_sys::ACCOUNT_ID account_id ) const
+{
+	auto current_node = m_head.get();
+
+	while( current_node )
+	{
+		if( current_node -> m_transaction )
+		{
+			if( current_node -> m_transaction -> getFromAccountId() == account_id
+
+				|| current_node -> m_transaction -> getToAccountId() == account_id )
+			{
+				current_node -> m_transaction -> printTransactionInfo();
+			}
 		}
 		current_node = current_node -> m_next.get();
 	}
@@ -52,6 +72,6 @@ void TransactionRegistry::printTransactionRegistry() const
 // initialize transaction node
 TransactionRegistry::TransactionNode::TransactionNode( Transaction&& transaction )
 
-	: m_user( std::make_unique< Transaction >( std::move( transaction ) ) ),
+	: m_transaction( std::make_unique< Transaction >( std::move( transaction ) ) ),
 
 	m_next( nullptr ), m_prev( nullptr ) { }

@@ -1,6 +1,7 @@
 #ifndef TRANSACTION_REGISTRY_H
 #define TRANSACTION_REGISTRY_H
 
+#include "Common.h"
 #include "Transaction.h" // Transaction
 #include <memory> // std::unique_ptr
 
@@ -18,6 +19,9 @@ public:
 	// print the entire transaction registry to the console
 	void printTransactionRegistry() const;
 
+	// filter the transaction registry by account number
+	void printFilteredTransactions( bank_sys::ACCOUNT_ID account_id ) const;
+
 private:
 
 	// manages a single node in the registry
@@ -29,7 +33,7 @@ private:
 		TransactionNode( Transaction&& transaction );
 
 		// transaction object
-		std::unique_ptr< Transaction > m_user;
+		std::unique_ptr< Transaction > m_transaction;
 
 		// next transaction node
 		std::unique_ptr< TransactionNode > m_next;

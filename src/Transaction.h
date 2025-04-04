@@ -21,6 +21,12 @@ public:
 	// initialize a transaction with a single account
 	Transaction( bank_sys::ACCOUNT_ID account_id, bank_sys::US_CENTS transaction_amount );
 
+	// get the from_account id
+	bank_sys::ACCOUNT_ID getFromAccountId() const;
+
+	// get the to_account id
+	bank_sys::ACCOUNT_ID getToAccountId() const;
+
 	// print the transaction details to the console
 	void printTransactionInfo() const;
 
