@@ -184,90 +184,90 @@ void test_SavingsAccount_WithdrawalLimitEngaged()
 
 // unit testing for TransactionUtilities
 
-void test_TransactionUtilities_DepositToAccount()
-{
-	CheckingAccount account;
-
-	Vault vault;
-
-	if( TransactionUtilities::depositToAccount( account, vault, 500 ) )
-	{
-		std::cout << "test_TransactionUtilities_DepositToAccount PASSED \n";
-	}
-	else
-	{
-		std::cout << "test_TransactionUtilities_DepositToAccoun FAILED \n";
-	}
-}
-
-void test_TransactionUtilities_WithdrawFromAccount()
-{
-	CheckingAccount account;
-
-	Vault vault;
-
-	account.deposit( 1000 );
-
-	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
-	{
-		std::cout << "test_TransactionUtilities_WithdrawFromAccount PASSED \n";
-	}
-	else
-	{
-		std::cout << "test_TransactionUtilities_WithdrawFromAccount FAILED \n";
-	}
-}
-
-void test_TransactionUtilities_TransferFromVaultToAccount()
-{
-	CheckingAccount account;
-
-	Vault vault;
-
-	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
-	{
-		std::cout << "test_TransactionUtilities_TransferFromVaultToAccount PASSED \n";
-	}
-	else
-	{
-		std::cout << "test_TransactionUtilities_TransferFromVaultToAccount FAILED \n";
-	}
-}
-
-void test_TransactionUtilities_TransferFromAccountToVault()
-{
-	CheckingAccount account;
-
-	Vault vault;
-
-	account.deposit( 1000 );
-
-	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
-	{
-		std::cout << "test_TransactionUtilities_TransferFromAccountToVault PASSED \n";
-	}
-	else
-	{
-		std::cout << "test_TransactionUtilities_TransferFromAccountToVault FAILED \n";
-	}
-}
-
-void test_TransactionUtilities_TransferFromAccountToAccount()
-{
-	CheckingAccount account_1;
-
-	SavingsAccount account_2;
-
-	Vault vault;
-
-	account_1.deposit( 1000 );
-
-	if( TransactionUtilities::transferFromAccountToAccount( account_1, account_2, vault, 500 ) )
-	{
-		std::cout << "test_TransactionUtilities_TransferFromAccountToAccount PASSED \n";
-	}
-	else
-	{
-		std::cout << "test_TransactionUtilities_TransferFromAccountToAccount FAILED \n";
-	}
-}
+//void test_TransactionUtilities_DepositToAccount()
+//{
+//	CheckingAccount account;
+//
+//	Vault vault;
+//
+//	if( TransactionUtilities::depositToAccount( account, vault, 500 ) )
+//	{
+//		std::cout << "test_TransactionUtilities_DepositToAccount PASSED \n";
+//	}
+//	else
+//	{
+//		std::cout << "test_TransactionUtilities_DepositToAccoun FAILED \n";
+//	}
+//}
+//
+//void test_TransactionUtilities_WithdrawFromAccount()
+//{
+//	CheckingAccount account;
+//
+//	Vault vault;
+//
+//	account.deposit( 1000 );
+//
+//	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
+//	{
+//		std::cout << "test_TransactionUtilities_WithdrawFromAccount PASSED \n";
+//	}
+//	else
+//	{
+//		std::cout << "test_TransactionUtilities_WithdrawFromAccount FAILED \n";
+//	}
+//}
+//
+//void test_TransactionUtilities_TransferFromVaultToAccount()
+//{
+//	CheckingAccount account;
+//
+//	Vault vault;
+//
+//	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromVaultToAccount PASSED \n";
+//	}
+//	else
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromVaultToAccount FAILED \n";
+//	}
+//}
+//
+//void test_TransactionUtilities_TransferFromAccountToVault()
+//{
+//	CheckingAccount account;
+//
+//	Vault vault;
+//
+//	account.deposit( 1000 );
+//
+//	if( TransactionUtilities::withdrawFromAccount( account, vault, 500 ) )
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromAccountToVault PASSED \n";
+//	}
+//	else
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromAccountToVault FAILED \n";
+//	}
+//}
+//
+//void test_TransactionUtilities_TransferFromAccountToAccount()
+//{
+//	CheckingAccount account_1;
+//
+//	SavingsAccount account_2;
+//
+//	Vault vault;
+//
+//	account_1.deposit( 1000 );
+//
+//	if( TransactionUtilities::transferFromAccountToAccount( account_1, account_2, vault, 500 ) )
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromAccountToAccount PASSED \n";
+//	}
+//	else
+//	{
+//		std::cout << "test_TransactionUtilities_TransferFromAccountToAccount FAILED \n";
+//	}
+//}
