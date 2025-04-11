@@ -1,176 +1,48 @@
-#include "UserRegistry.h" // implementing UserRegistry.h
+#include "UserRegistry.h" // implementing
 
-// initialize user registry
-UserRegistry::UserRegistry()
-
-	: m_head( nullptr ), m_tail( nullptr ) { }
-
-// add a new user to the registry
+// insert a new user
 void UserRegistry::insertUser( User&& user )
 {
-	// initialize user node
-	auto new_node = std::make_unique< UserNode >( std::move( user ) );
-
-	// check if the list is empty
-	if( m_head == nullptr )
-	{
-		// set the head to the new node
-		m_head = std::move( new_node );
-
-		// set the tail to the head
-		m_tail = m_head.get();
-
-	}
-	else
-	{
-		// set the current tail's next pointer to the new node
-		m_tail -> m_next = std::move( new_node );
-
-		// set the prev pointer of the new tail to the old tail
-		m_tail -> m_next -> m_prev = m_tail;
-
-		// update the tail to the new node
-		m_tail = m_tail -> m_next.get();
-	}
+	m_users.insert( std::move( user ) );
 }
 
-// delete an existing user from the registry
+// delete an existing user
 bool UserRegistry::deleteUser( bank_sys::USER_ID user_id )
 {
-	// check if the list is empty
-	if( m_head == nullptr )
-	{
-		return false; // nothing to delete
-	}
-	// start from the head
-	auto current_node = m_head.get();
-
-	// iterate through each node in the list
-	while( current_node != nullptr )
-	{
-		// check if the user id matches
-		if( current_node -> m_user.get() -> getUserId() == user_id )
-		{
-			// if the current node is the head node
-			if( current_node == m_head.get() )
-			{
-				// if there is only one node in the list
-				if( m_head.get() == m_tail )
-				{
-					// list becomes empty
-					m_head = nullptr;
-
-					m_tail = nullptr;
-				}
-				else
-				{
-					// move the head forward
-					m_head = std::move( m_head -> m_next );
-
-					m_head -> m_prev = nullptr;
-				}
-			} // if the current node is the tail node
-			else if( current_node == m_tail )
-			{
-				// move the tail backwards
-				m_tail = m_tail -> m_prev;
-
-				m_tail -> m_next = nullptr;
-
-			} // if the current node is a middle node
-			else
-			{
-				// set the prev pointer of the next node to the previous node
-				current_node -> m_next -> m_prev = current_node -> m_prev;
-
-				// move the next node into the previous node's next pointer
-				current_node -> m_prev -> m_next = std::move( current_node -> m_next );
-			}
-			// return after successful deletion
-			return true;
-		}
-		// move to the next node
-		current_node = current_node -> m_next.get();
-	}
-	// user id not found
-	return false;
+	return m_users.removeIf(
+		
+			[ user_id ]( const User& user ){ return user.getUserId() == user_id; }
+	);
 }
 
-// search for a user in the registry
-User* UserRegistry::findUser( bank_sys::USER_ID user_id )
+// find an existing user
+User* UserRegistry::findUser( bank_sys::USER_ID user_id ) const
 {
-	// check if the list is empty
-	if( m_head == nullptr )
-	{
-		// return nullptr if empty
-		return nullptr;
-	}
-	// start from the head node
-	auto current_node = m_head.get();
+	return m_users.findIf(
 
-	// iterate through each node in the list
-	while( current_node != nullptr )
-	{
-		// check if the user id matches
-		if( current_node -> m_user.get() -> getUserId() == user_id )
-		{
-			// return the user if found
-			return current_node -> m_user.get();
-		}
-		// move to the next node
-		current_node = current_node -> m_next.get();
-	}
-	// user id not found
-	return nullptr;
+		[ user_id ]( const User& user ){ return user.getUserId() == user_id; }
+	);
 }
 
-// update an existing user in the registry
+// update an existing user
 bool UserRegistry::updateUser( bank_sys::USER_ID user_id, const User::UserInfo& user_info )
 {
-	// check if the list is empty
-	if( m_head == nullptr )
-	{
-		return false; // nothing here to update
-	}
-	// start from the head node
-	auto current_node = m_head.get();
+	User* update_user = findUser( user_id );
 
-	// iterate through each node in the list
-	while( current_node != nullptr )
+	if( update_user )
 	{
-		// check if the user id matches
-		if( current_node -> m_user -> getUserId() == user_id )
-		{
-			// update the user inside of the node
-			current_node -> m_user -> updateUserInfo( user_info );
+		update_user -> updateUserInfo( user_info );
 
-			return true; // update successful
-		}
-		// move to the next node
-		current_node = current_node -> m_next.get();
+		return true;
 	}
-	// user id not found
 	return false;
 }
 
-// print the entire user registry to the console
+// print the user registry to the console
 void UserRegistry::printUserRegistry() const
 {
-	auto current_node = m_head.get();
+	m_users.forEach(
 
-	while( current_node )
-	{
-		if( current_node -> m_user )
-		{
-			current_node -> m_user -> printUserInfo();
-		}
-		current_node = current_node -> m_next.get();
-	}
+		[]( const User& user ) { user.printUserInfo();  }
+	);
 }
-
-// initialize user node
-UserRegistry::UserNode::UserNode( User&& user )
-
-	: m_user( std::make_unique< User >( std::move( user ) ) ),
-
-	m_next( nullptr ), m_prev( nullptr ) { }

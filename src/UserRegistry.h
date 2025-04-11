@@ -3,6 +3,7 @@
 
 #include "Common.h" // bank_sys
 #include "User.h" // User
+#include "DoublyLinkedList.h" // DoublyLinkedList
 
 // manages all users in a linked list
 class UserRegistry
@@ -10,47 +11,27 @@ class UserRegistry
 public:
 
 	// initialize user registry
-	UserRegistry();
+	UserRegistry() = default;
 
-	// add a new user to the registry
+	// insert a new user
 	void insertUser( User&& user );
 
-	// delete an existing user from the registry
+	// delete an existing user
 	bool deleteUser( bank_sys::USER_ID user_id );
 
-	// search for a user in the registry
-	User* findUser( bank_sys::USER_ID user_id );
+	// find an existing user
+	User* findUser( bank_sys::USER_ID user_id ) const;
 
-	// update an existing user in the registry
+	// update an existing user
 	bool updateUser( bank_sys::USER_ID user_id, const User::UserInfo& user_info );
 
-	// print the entire user registry to the console
+	// print the user registry to the console
 	void printUserRegistry() const;
 
 private:
 
-	// manages a single node in the registry
-	class UserNode
-	{
-	public:
-
-		// initialize user node
-		UserNode( User&& user );
-
-		// user object
-		std::unique_ptr< User > m_user;
-
-		// next user node
-		std::unique_ptr< UserNode > m_next;
-
-		// prev user node
-		UserNode* m_prev;
-	};
-	// head node
-	std::unique_ptr< UserNode > m_head;
-
-	// tail node
-	UserNode* m_tail;
+	// implementation of the linked list
+	DoublyLinkedList< User > m_users;
 };
 
 #endif // USER_REGISTRY_H
