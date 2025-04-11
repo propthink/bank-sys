@@ -1,9 +1,9 @@
 #ifndef TRANSACTION_REGISTRY_H
 #define TRANSACTION_REGISTRY_H
 
-#include "Common.h"
+#include "Common.h" // bank_sys
 #include "Transaction.h" // Transaction
-#include <memory> // std::unique_ptr
+#include "DoublyLinkedList.h" // DoublyLinkedList
 
 // manages all transactions in a linked list
 class TransactionRegistry
@@ -11,12 +11,12 @@ class TransactionRegistry
 public:
 
 	// initialize transaction registry
-	TransactionRegistry();
+	TransactionRegistry() = default;
 
-	// add a new transaction to the registry
+	// add a new transaction
 	void insertTransaction( Transaction&& transaction );
 
-	// print the entire transaction registry to the console
+	// print the transaction registry to the console
 	void printTransactionRegistry() const;
 
 	// filter the transaction registry by account number
@@ -24,28 +24,8 @@ public:
 
 private:
 
-	// manages a single node in the registry
-	class TransactionNode
-	{
-	public:
-
-		// initialize transaction node
-		TransactionNode( Transaction&& transaction );
-
-		// transaction object
-		std::unique_ptr< Transaction > m_transaction;
-
-		// next transaction node
-		std::unique_ptr< TransactionNode > m_next;
-
-		// prev transaction node
-		TransactionNode* m_prev;
-	};
-	// head node
-	std::unique_ptr< TransactionNode > m_head;
-
-	// tail node
-	TransactionNode* m_tail;
+	// implementation of the linked list
+	DoublyLinkedList< Transaction > m_transactions;
 };
 
 #endif // TRANSACTION_REGISTRY_H
