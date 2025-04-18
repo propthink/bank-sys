@@ -45,6 +45,9 @@ public:
 
 	// print the account details to the console
 	virtual void printAccountInfo() const = 0;
+
+	// print the transaction history to the console
+	virtual void printTransactionHistory() const = 0;
 };
 
 #endif // IACCOUNT_H

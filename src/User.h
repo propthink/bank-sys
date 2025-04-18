@@ -59,6 +59,9 @@ public:
 	// remove an existing account from this user
 	bool removeAccount( bank_sys::ACCOUNT_ID account_id );
 
+	// access an account associated with this user
+	IAccount* accessAccount() const;
+
 	// print the user details to the console
 	void printUserInfo() const;
 

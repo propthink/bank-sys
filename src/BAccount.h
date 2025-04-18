@@ -38,6 +38,9 @@ public:
 	// print the account details to the console
 	void printAccountInfo() const override;
 
+	// print the transaction history to the console
+	void printTransactionHistory() const override;
+
 protected:
 
 	// generates a random, unique account ID

@@ -1,4 +1,5 @@
 #include "User.h" // implementing User.h
+#include "InputValidation.h" // input validation
 #include <iostream> // std::cout
 #include <random> // rng
 
@@ -89,6 +90,47 @@ bool User::removeAccount( bank_sys::ACCOUNT_ID account_id )
 	return false; // account not found
 }
 
+// access an account associated with this user
+IAccount* User::accessAccount() const
+{
+	// check if there is a valid account associated with this user
+	if( m_user_accounts.empty() )
+	{
+		std::cout << "There are currently no accounts associated with this user \n";
+
+		return nullptr;
+	}
+	// initialize the user input
+	std::string user_input { "" };
+
+	// input and validate the user input
+	while( true )
+	{
+		std::cout << "Select one from the following accounts: \n";
+
+		for( int i = 0; i < m_user_accounts.size(); ++i )
+		{
+			std::cout << "\n[" << ( i + 1 ) << "]: ";
+			
+			m_user_accounts.at( i ).get() -> printAccountInfo();
+		}
+		std::cout << "\nEnter your selection here: ";
+
+		// capture the user input
+		std::getline( std::cin, user_input );
+
+		// validate the user input
+		if( !user_input.empty() && isDigitsOnly( user_input )
+
+			&& ( std::stoi( user_input ) > 0 ) && std::stoi( user_input ) <= m_user_accounts.size() )
+		{
+			break; // input is valid
+		}
+		std::cout << "Invalid input detected, please try again \n";
+	}
+	return m_user_accounts.at( std::stoi( user_input ) - 1 ).get();
+}
+
 // print the user details to the console
 void User::printUserInfo() const
 {
@@ -113,6 +155,8 @@ void User::printAccountInfo() const
 		for( const auto& account : m_user_accounts )
 		{
 			account -> printAccountInfo();
+
+			std::cout << '\n';
 		}
 	}
 }

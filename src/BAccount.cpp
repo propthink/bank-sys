@@ -65,6 +65,12 @@ void BAccount::printAccountInfo() const
 
 	std::cout.imbue( original_locale ); // restore the original format
 
+	printTransactionHistory(); // print transaction history
+}
+
+// print the transaction history to the console
+void BAccount::printTransactionHistory() const
+{
 	m_transaction_history.printTransactionRegistry();
 }
 
