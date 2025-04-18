@@ -62,6 +62,9 @@ public:
 	// print the user details to the console
 	void printUserInfo() const;
 
+	// print the account details to the console
+	void printAccountInfo() const;
+
 private:
 
 	// generates a random, unique user ID

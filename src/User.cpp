@@ -99,11 +99,21 @@ void User::printUserInfo() const
 	std::cout << " | PHONE: " << m_user_info.m_phone_number;
 
 	std::cout << " | EMAIL: " << m_user_info.m_email_address << '\n';
+}
 
-	// print account details
-	for( const auto& account : m_user_accounts )
+// print the account details to the console
+void User::printAccountInfo() const
+{
+	if( m_user_accounts.empty() )
 	{
-		account -> printAccountInfo();
+		std::cout << "There are currently no accounts associated with this user \n";
+	}
+	else
+	{
+		for( const auto& account : m_user_accounts )
+		{
+			account -> printAccountInfo();
+		}
 	}
 }
 
